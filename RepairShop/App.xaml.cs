@@ -12,11 +12,11 @@ namespace RepairShop;
 /// </summary>
 public partial class App : Application
 {
-    private IServiceProvider _serviceProvider = null!;
-    public IConfiguration Configuration { get; private set; } = null!;
+    public IServiceProvider ServiceProvider { get; private set; } = null!;
 
-    private void ConfigureServices(IServiceCollection services)
+    private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton(x => configuration);
         ConfigurePresentation(services);
     }
     
@@ -36,14 +36,14 @@ public partial class App : Application
            .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-        Configuration = builder.Build();
+        var configuration = builder.Build();
 
         var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection);
+        ConfigureServices(serviceCollection, configuration);
 
-        _serviceProvider = serviceCollection.BuildServiceProvider();
+        ServiceProvider = serviceCollection.BuildServiceProvider();
 
-        var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }
 }
