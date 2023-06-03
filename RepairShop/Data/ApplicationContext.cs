@@ -112,6 +112,9 @@ public class ApplicationContext : DbContext
             entity.Property(e => e.Login)
                 .HasMaxLength(50)
                 .HasColumnName("login");
+            entity.Property(e => e.Password)
+                .HasMaxLength(50)
+                .HasColumnName("password");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)

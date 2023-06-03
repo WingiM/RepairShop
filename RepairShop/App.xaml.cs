@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RepairShop.Data;
+using RepairShop.Services;
+using RepairShop.Services.Impl;
 using RepairShop.Views;
 using System;
 using System.Globalization;
@@ -19,6 +21,7 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddDbContext<ApplicationContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("Database"),
