@@ -1,8 +1,9 @@
 ﻿using LanguageExt.Common;
+using RepairShop.Data.Models;
 
 namespace RepairShop.Services;
 
 public interface IAuthorizationService
 {
-    public Result<bool> AuthorizeUser(string login, string password);
+    public Result<User> AuthorizeUser(string login, string password);
 }

@@ -1,5 +1,4 @@
-﻿using RepairShop.Services;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace RepairShop.Views;
