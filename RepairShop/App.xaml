@@ -2,6 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="PrimaryColor" Color="#FCC72E"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#BDBDBD"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#FF4F6F"/>
     </Application.Resources>
 </Application>

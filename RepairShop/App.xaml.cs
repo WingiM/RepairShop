@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RepairShop.Data;
+using RepairShop.Views;
 using System;
 using System.Globalization;
 using System.IO;
