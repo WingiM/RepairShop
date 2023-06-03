@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RepairShop.Data;
 using System;
 using System.Globalization;
 using System.IO;
@@ -16,10 +18,16 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDbContext<ApplicationContext>(options =>
+        {
+            options.UseNpgsql(configuration.GetConnectionString("Database"),
+                npgsqlOptions => npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        });
         services.AddSingleton(x => configuration);
         ConfigurePresentation(services);
     }
-    
+
     private void ConfigurePresentation(IServiceCollection services)
     {
         services.AddSingleton(typeof(MainWindow));
