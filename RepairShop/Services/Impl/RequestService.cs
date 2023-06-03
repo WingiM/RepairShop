@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using LanguageExt.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RepairShop.Data;
 using RepairShop.Data.DTO;
@@ -28,7 +29,8 @@ public class RequestService : IRequestService
     /// </summary>
     public Result<IEnumerable<RepairRequest>> ListForMaster(int masterId)
     {
-        if (_context.Users.FirstOrDefault(x => x.Id == masterId)?.RoleId != (int)Roles.Master)
+        var existingMaster = _context.Users.FirstOrDefault(x => x.Id == masterId);
+        if (existingMaster is null || existingMaster.RoleId != (int)Roles.Master)
             return new Result<IEnumerable<RepairRequest>>(new Exception("Указанный пользователь не является мастером"));
 
         return new Result<IEnumerable<RepairRequest>>(_context.RepairRequests.Where(x => x.MasterId == masterId || x.MasterId == null));
@@ -39,10 +41,31 @@ public class RequestService : IRequestService
     /// </summary>
     public Result<IEnumerable<RepairRequest>> ListForClient(int clientId)
     {
-        if (_context.Users.FirstOrDefault(x => x.Id == clientId)?.RoleId != (int)Roles.Client)
+        var existingClient = _context.Users.FirstOrDefault(x => x.Id == clientId);
+        if (existingClient is null || existingClient.RoleId != (int)Roles.Client)
             return new Result<IEnumerable<RepairRequest>>(new Exception("Указанный пользователь не является клиентом"));
 
         return new Result<IEnumerable<RepairRequest>>(_context.RepairRequests.Where(x => x.ClientId == clientId));
+    }
+
+    /// <summary>
+    /// Get the request info by its id
+    /// </summary>
+    public Result<RepairRequest?> GetRequestById(int requestId)
+    {
+        return _context.RepairRequests
+            .Include(x => x.Master)
+            .Include(x => x.Client)
+            .Include(x => x.StatusHistories.Where(x => x.IsActual))
+            .FirstOrDefault(x => x.Id == requestId);
+    }
+
+    /// <summary>
+    /// Get the list of status changes for the request
+    /// </summary>
+    public Result<IEnumerable<StatusHistory>> GetStatusHistoryForRequest(int requestId)
+    {
+        return new Result<IEnumerable<StatusHistory>>(_context.StatusHistories.Where(x => x.RequestId == requestId).OrderBy(x => x.DateChanged));
     }
 
     /// <summary>
@@ -56,6 +79,11 @@ public class RequestService : IRequestService
 
         var repairRequest = new RepairRequest { ClientId = request.ClientId, Description = request.Description, ShortName = request.ShortName };
         _context.RepairRequests.Add(repairRequest);
+        
+        // Set default status to a new request
+        var requestStatus = new StatusHistory { DateChanged = DateTime.Now.ToUniversalTime(), IsActual = true, Request = repairRequest, StatusId = (int)RequestStatuses.AwaitsConfirmation };
+        _context.StatusHistories.Add(requestStatus);
+
         _context.SaveChanges();
         return repairRequest;
     }
@@ -77,13 +105,47 @@ public class RequestService : IRequestService
         return existingRequest;
     }
 
-    public Result<bool> AssignMaster(int requestId, int masterId)
+    /// <summary>
+    /// Assigns the master to the created request
+    /// </summary>
+    public Result<bool> AssignMaster(AssignMasterToRequestDto request)
     {
-        throw new NotImplementedException();
+        var validationResult = _serviceProdiver.GetRequiredService<IValidator<AssignMasterToRequestDto>>().Validate(request);
+        if (!validationResult.IsValid)
+            return new Result<bool>(new ValidationException(validationResult.Errors));
+
+        var existingRequest = _context.RepairRequests.Find(request.RequestId)!;
+        existingRequest.MasterId = request.MasterId;
+        _context.RepairRequests.Update(existingRequest);
+
+        ChangeStatusInternal(request.RequestId, RequestStatuses.TransferedToMaster);
+
+        _context.SaveChanges();
+        return true;
     }
 
-    public Result<bool> ChangeStatus(int requestId, RequestStatuses status)
+    /// <summary>
+    /// Changes the status of the request
+    /// </summary>
+    public Result<bool> ChangeStatus(ChangeRequestStatusDto request)
     {
-        throw new NotImplementedException();
+        var validationResult = _serviceProdiver.GetRequiredService<IValidator<ChangeRequestStatusDto>>().Validate(request);
+        if (!validationResult.IsValid)
+            return new Result<bool>(new ValidationException(validationResult.Errors));
+
+        return ChangeStatusInternal(request.RequestId, request.Status);
+    }
+
+    private Result<bool> ChangeStatusInternal(int requestId,  RequestStatuses status)
+    {
+        var actualStatus = _context.StatusHistories.First(x => x.RequestId == requestId && x.IsActual);
+        actualStatus.IsActual = false;
+        _context.StatusHistories.Update(actualStatus);
+
+        var requestStatus = new StatusHistory { DateChanged = DateTime.Now.ToUniversalTime(), IsActual = true, RequestId = requestId, StatusId = (int)status };
+        _context.StatusHistories.Add(requestStatus);
+
+        _context.SaveChanges();
+        return true;
     }
 }
