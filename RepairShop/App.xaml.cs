@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RepairShop.Data;
@@ -17,11 +18,11 @@ namespace RepairShop;
 /// </summary>
 public partial class App : Application
 {
-    public IServiceProvider ServiceProvider { get; private set; } = null!;
-
     private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddValidatorsFromAssembly(typeof(App).Assembly);
         services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IRequestService, RequestService>();
         services.AddDbContext<ApplicationContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("Database"),
@@ -53,9 +54,9 @@ public partial class App : Application
         var serviceCollection = new ServiceCollection();
         ConfigureServices(serviceCollection, configuration);
 
-        ServiceProvider = serviceCollection.BuildServiceProvider();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }
 }
