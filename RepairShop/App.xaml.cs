@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RepairShop.Data;
+using RepairShop.Extensions;
 using RepairShop.Services;
 using RepairShop.Services.Impl;
+using RepairShop.Navigation;
+using RepairShop.ViewModels;
 using RepairShop.Views;
-using System;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -35,6 +37,12 @@ public partial class App : Application
 
     private void ConfigurePresentation(IServiceCollection services)
     {
+        services.AddSingleton<NavigationService>();
+
+        services.AddViewModelFactory<AuthorizationViewModel>();
+        services.AddViewModelFactory<RegisterViewModel>();
+        services.AddSingleton<MainViewModel>();
+
         services.AddSingleton(typeof(MainWindow));
     }
 

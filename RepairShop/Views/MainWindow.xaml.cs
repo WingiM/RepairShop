@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using RepairShop.ViewModels;
+using System.Windows;
 
 namespace RepairShop.Views;
 
@@ -8,26 +8,12 @@ namespace RepairShop.Views;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    private readonly MainViewModel _viewModel;
+
+    public MainWindow(MainViewModel viewModel)
     {
+        _viewModel = viewModel;
+        DataContext = viewModel;
         InitializeComponent();
-        MainFrame.Navigated += MainFrame_Navigated;
-    }
-
-    private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
-    {
-        var res = (e.Content as Page);
-        if (res == null) return;
-
-        if (!MainFrame.NavigationService.CanGoBack) GoBackButton.Visibility = Visibility.Collapsed;
-        else GoBackButton.Visibility = Visibility.Visible;
-        TitleTb.Text = res.Title;
-        Title = res.Title;
-    }
-
-    private void GoBackButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (!MainFrame.NavigationService.CanGoBack) return;
-        MainFrame.NavigationService.GoBack();
     }
 }

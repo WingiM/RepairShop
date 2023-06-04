@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
+using RepairShop.ViewModels;
 
 namespace RepairShop.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddControlFactory<TControl>(this IServiceCollection services)
-        where TControl : UIElement
+    public static void AddViewModelFactory<TViewModel>(this IServiceCollection services)
+        where TViewModel : BaseViewModel
     {
-        services.AddTransient<TControl>();
-        services.AddSingleton(x => new ControlFactory<TControl>(() => x.GetRequiredService<TControl>()));
+        services.AddTransient<TViewModel>();
+        services.AddSingleton(x => new ViewModelFactory<TViewModel>(() => x.GetRequiredService<TViewModel>()));
     }
 }

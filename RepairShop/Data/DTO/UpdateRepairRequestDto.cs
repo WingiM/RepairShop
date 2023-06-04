@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RepairShop.Data.DTO;
+﻿namespace RepairShop.Data.DTO;
 
 public class UpdateRepairRequestDto
 {
-    public int RequestId { get; set; }
+    public required int RequestId { get; set; }
 
-    public string ShortName { get; set; } = null!;
+    public required string ShortName { get; set; }
 
-    public string Description { get; set; } = null!;
+    public required string Description { get; set; }
 }

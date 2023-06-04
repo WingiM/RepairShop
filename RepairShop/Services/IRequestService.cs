@@ -1,6 +1,5 @@
 ﻿using LanguageExt.Common;
 using RepairShop.Data.DTO;
-using RepairShop.Data.Enums;
 using RepairShop.Data.Models;
 using System.Collections.Generic;
 
