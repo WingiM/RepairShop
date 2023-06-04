@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RepairShop.Navigation;
 
-public class NavigationService : ObservableObject
+public class NavigationService
 {
     private readonly Stack<BaseViewModel> _routeHistory;
 
@@ -33,6 +33,15 @@ public class NavigationService : ObservableObject
 
     public void Navigate<TViewModel>() where TViewModel : BaseViewModel
     {
+        _routeHistory.Push(CurrentViewModel);
+        var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
+        var viewModel = viewModelFactory.GetControl();
+        CurrentViewModel = viewModel;
+    }
+
+    public void PopAndNavigate<TViewModel>() where TViewModel : BaseViewModel
+    {
+        _routeHistory.Pop();
         _routeHistory.Push(CurrentViewModel);
         var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
         var viewModel = viewModelFactory.GetControl();
