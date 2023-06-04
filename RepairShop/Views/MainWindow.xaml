@@ -3,20 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:RepairShop.ViewModels"
         xmlns:views="clr-namespace:RepairShop.Views.Controls"
         mc:Ignorable="d"
-        Title="{Binding CurrentViewModel.ViewModelTitle}" Height="450" Width="800"
-        Mouse.MouseDown="Window_MouseDown">
+        Title="{Binding CurrentViewModel.ViewModelTitle}" Height="600" Width="800"
+        Mouse.MouseDown="Window_MouseDown"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        ui:TitleBar.IsBackButtonVisible="True"
+        ui:TitleBar.BackButtonCommand="{Binding GoBackCommand}">
     <Grid Background="{StaticResource PrimaryColor}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <StackPanel Background="{StaticResource SecondaryColor}" HorizontalAlignment="Stretch" Orientation="Horizontal">
-            <Button x:Name="GoBackButton" Style="{StaticResource GoBackButton}" Background="{StaticResource AccentColor}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Command="{Binding GoBackCommand}">
-                Назад
-            </Button>
             <Image Margin="20 2 10 2" Source="/Images/tools.png" />
             <Label FontSize="18" VerticalAlignment="Center">Ремонтная мастерская</Label>
         </StackPanel>

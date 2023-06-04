@@ -1,13 +1,12 @@
-﻿namespace RepairShop.Views.Controls
+﻿namespace RepairShop.Views.Controls;
+
+/// <summary>
+/// Interaction logic for AuthorizationPage.xaml
+/// </summary>
+public partial class AuthorizationPage
 {
-    /// <summary>
-    /// Interaction logic for AuthorizationPage.xaml
-    /// </summary>
-    public partial class AuthorizationPage
+    public AuthorizationPage()
     {
-        public AuthorizationPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -12,6 +12,7 @@ using RepairShop.Views;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Linq;
 
 namespace RepairShop;
 
@@ -64,6 +65,9 @@ public partial class App
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
+        var context = serviceProvider.GetRequiredService<ApplicationContext>();
+        // warmup query
+        context.Users.ToList();
         var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }

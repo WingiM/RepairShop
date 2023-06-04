@@ -18,5 +18,9 @@ public class RegisterUserValidator : AbstractValidator<RegisterUserDto>
         RuleFor(x => x.Password)
             .NotEmpty()
             .MaximumLength(50);
+
+        RuleFor(x => new { x.Password, x.RepeatPassword })
+            .Must(x => x.Password == x.RepeatPassword)
+            .WithMessage("Пароли не совпадают");
     }
 }
