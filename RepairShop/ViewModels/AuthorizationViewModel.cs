@@ -9,7 +9,7 @@ public class AuthorizationViewModel : BaseViewModel
     public AuthorizationViewModel(NavigationService navigationService)
     {
         ViewModelTitle = "Авторизация";
-        RegisterCommand = new RelayCommand(() => { navigationService.Navigate<RegisterViewModel>();CommandManager.InvalidateRequerySuggested(); }, () => true);
+        RegisterCommand = new RelayCommand(() => navigationService.Navigate<RegisterViewModel>(), () => true);
     }
 
     public ICommand RegisterCommand { get; private set; }

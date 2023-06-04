@@ -6,7 +6,8 @@
         xmlns:vms="clr-namespace:RepairShop.ViewModels"
         xmlns:views="clr-namespace:RepairShop.Views.Controls"
         mc:Ignorable="d"
-        Title="{Binding CurrentViewModel.ViewModelTitle}" Height="450" Width="800">
+        Title="{Binding CurrentViewModel.ViewModelTitle}" Height="450" Width="800"
+        Mouse.MouseDown="Window_MouseDown">
     <Grid Background="{StaticResource PrimaryColor}">
         <Grid.RowDefinitions>
             <RowDefinition/>
