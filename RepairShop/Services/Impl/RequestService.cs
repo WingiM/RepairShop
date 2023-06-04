@@ -56,7 +56,7 @@ public class RequestService : IRequestService
         return _context.RepairRequests
             .Include(x => x.Master)
             .Include(x => x.Client)
-            .Include(x => x.StatusHistories.Where(x => x.IsActual))
+            .Include(x => x.StatusHistories.Where(z => z.IsActual))
             .FirstOrDefault(x => x.Id == requestId);
     }
 

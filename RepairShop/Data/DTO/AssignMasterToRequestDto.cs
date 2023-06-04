@@ -2,7 +2,7 @@
 
 public class AssignMasterToRequestDto
 {
-    public required int RequestId { get; set; }
+    public required int RequestId { get; init; }
     
-    public required int MasterId { get; set; }
+    public required int MasterId { get; init; }
 }

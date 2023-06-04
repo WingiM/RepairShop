@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RepairShop"
         xmlns:vms="clr-namespace:RepairShop.ViewModels"
         xmlns:views="clr-namespace:RepairShop.Views.Controls"
         mc:Ignorable="d"
@@ -13,16 +12,15 @@
             <RowDefinition/>
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <StackPanel Background="{StaticResource SecondaryColor}" HorizontalAlignment="Stretch" Orientation="Horizontal">
-            <Button x:Name="GoBackButton" Background="{StaticResource AccentColor}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="Collapsed">Назад</Button>
+            <Button x:Name="GoBackButton" Style="{StaticResource GoBackButton}" Background="{StaticResource AccentColor}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Command="{Binding GoBackCommand}">
+                Назад
+            </Button>
             <Image Margin="20 2 10 2" Source="/Images/tools.png" />
             <Label FontSize="18" VerticalAlignment="Center">Ремонтная мастерская</Label>
         </StackPanel>
-        <TextBlock Margin="20 0 0 0" Text="{Binding CurrentViewModel.ViewModelTitle}" x:Name="TitleTb" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Center"/>
-        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentViewModel}">
+        <TextBlock Grid.Row="0" Margin="20 0 0 0" Text="{Binding CurrentViewModel.ViewModelTitle}" x:Name="TitleTb" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Center"/>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type vms:AuthorizationViewModel}">
                     <views:AuthorizationPage/>

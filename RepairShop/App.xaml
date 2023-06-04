@@ -5,5 +5,13 @@
         <SolidColorBrush x:Key="PrimaryColor" Color="#FCC72E"/>
         <SolidColorBrush x:Key="SecondaryColor" Color="#BDBDBD"/>
         <SolidColorBrush x:Key="AccentColor" Color="#FF4F6F"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style x:Key="GoBackButton" TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>

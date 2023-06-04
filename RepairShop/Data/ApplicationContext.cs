@@ -10,15 +10,15 @@ public class ApplicationContext : DbContext
     {
     }
 
-    public virtual DbSet<RepairRequest> RepairRequests { get; set; }
+    public virtual DbSet<RepairRequest> RepairRequests { get; set; } = null!;
 
-    public virtual DbSet<RequestStatus> RequestStatuses { get; set; }
+    public virtual DbSet<RequestStatus> RequestStatuses { get; set; } = null!;
 
-    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<Role> Roles { get; set; } = null!;
 
-    public virtual DbSet<StatusHistory> StatusHistories { get; set; }
+    public virtual DbSet<StatusHistory> StatusHistories { get; set; } = null!;
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

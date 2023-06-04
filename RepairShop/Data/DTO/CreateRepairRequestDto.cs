@@ -2,9 +2,9 @@
 
 public class CreateRepairRequestDto
 {
-    public required int ClientId { get; set; }
+    public required int ClientId { get; init; }
 
-    public required string ShortName { get; set; }
+    public required string ShortName { get; init; }
 
-    public required string Description { get; set; }
+    public required string Description { get; init; }
 }

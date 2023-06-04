@@ -2,7 +2,7 @@
 
 namespace RepairShop.Data.Models;
 
-public partial class StatusHistory
+public class StatusHistory
 {
     public int Id { get; set; }
 

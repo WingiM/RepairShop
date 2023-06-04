@@ -2,9 +2,9 @@
 
 public class UpdateRepairRequestDto
 {
-    public required int RequestId { get; set; }
+    public required int RequestId { get; init; }
 
-    public required string ShortName { get; set; }
+    public required string ShortName { get; init; }
 
-    public required string Description { get; set; }
+    public required string Description { get; init; }
 }

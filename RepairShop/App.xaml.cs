@@ -18,7 +18,7 @@ namespace RepairShop;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
     private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
@@ -31,7 +31,7 @@ public partial class App : Application
                 npgsqlOptions => npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        services.AddSingleton(x => configuration);
+        services.AddSingleton(configuration);
         ConfigurePresentation(services);
     }
 

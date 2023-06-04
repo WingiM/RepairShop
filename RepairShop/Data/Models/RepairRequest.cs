@@ -2,7 +2,7 @@
 
 namespace RepairShop.Data.Models;
 
-public partial class RepairRequest
+public class RepairRequest
 {
     public int Id { get; set; }
 

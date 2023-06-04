@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using RepairShop.ViewModels;
 using System;
 using System.Collections.Generic;
 
 namespace RepairShop.Navigation;
 
-public class NavigationService
+public class NavigationService : ObservableObject
 {
-    private Dictionary<AppRoutes, Type> routeToType = new Dictionary<AppRoutes, Type>() { { AppRoutes.Authorization, typeof(AuthorizationViewModel)}, { AppRoutes.Register, typeof(RegisterViewModel)} };
+    private readonly Stack<BaseViewModel> _routeHistory;
 
     private BaseViewModel _currentViewModel = null!;
     public BaseViewModel CurrentViewModel
@@ -20,17 +21,29 @@ public class NavigationService
         }
     }
 
+    public bool CanGoBack => _routeHistory.Length() != 1;
+
     private readonly IServiceProvider _serviceProvider;
 
     public NavigationService(IServiceProvider serviceProvider)
     {
+        _routeHistory = new Stack<BaseViewModel>();
         _serviceProvider = serviceProvider;
     }
 
     public void Navigate<TViewModel>() where TViewModel : BaseViewModel
     {
+        _routeHistory.Push(CurrentViewModel);
         var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
-        CurrentViewModel = viewModelFactory.GetControl();
+        var viewModel = viewModelFactory.GetControl();
+        CurrentViewModel = viewModel;
+    }
+
+    public void GoBack()
+    {
+        if (!CanGoBack) return;
+        var viewModel = _routeHistory.Pop();
+        CurrentViewModel = viewModel;
     }
 
     public event Action? CurrentViewModelChanged;
@@ -39,10 +52,4 @@ public class NavigationService
     {
         CurrentViewModelChanged?.Invoke();
     }
-}
-
-public enum AppRoutes
-{
-    Register = 1,
-    Authorization = 2
 }
