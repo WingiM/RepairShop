@@ -1,4 +1,4 @@
-﻿namespace RepairShop.Views.Controls
+﻿namespace RepairShop.Views.Pages
 {
     /// <summary>
     /// Interaction logic for RegistrationPage.xaml

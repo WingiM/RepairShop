@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:RepairShop.ViewModels"
-        xmlns:views="clr-namespace:RepairShop.Views.Controls"
+        xmlns:views="clr-namespace:RepairShop.Views.Pages"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="{Binding CurrentViewModel.ViewModelTitle}" Height="600" Width="800"
         Mouse.MouseDown="Window_MouseDown"
@@ -21,6 +22,18 @@
             <Image Margin="20 2 10 2" Source="/Images/tools.png" />
             <Label FontSize="18" VerticalAlignment="Center">Ремонтная мастерская</Label>
         </StackPanel>
+        <Button HorizontalAlignment="Right" Background="{StaticResource AccentColor}" Height="50" Width="50" 
+                Margin="0 0 15 0" Foreground="White" Command="{Binding GoToUserPageCommand}"
+                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" >
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                    <Ellipse Fill="{StaticResource AccentColor}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding UserLetter}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <TextBlock Grid.Row="0" Margin="20 0 0 0" Text="{Binding CurrentViewModel.ViewModelTitle}" x:Name="TitleTb" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Center"/>
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
@@ -30,7 +43,11 @@
                 <DataTemplate DataType="{x:Type vms:RegisterViewModel}">
                     <views:RegistrationPage/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:ClientPageViewModel}">
+                    <views:ClientPage/>
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
+        <material:Snackbar Background="{StaticResource AccentColor}" Foreground="White" Grid.Row="1" MessageQueue="{Binding CurrentViewModel.SnackbarMessageQueue}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0" MinWidth="200" MinHeight="60"/>
     </Grid>
 </Window>

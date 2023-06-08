@@ -43,12 +43,12 @@ public partial class RegisterViewModel : BaseViewModel
         result.IfFail(x =>
         {
             var message = x is ValidationException ve ? string.Join('\n', ve.Errors.Select(x => x.ErrorMessage)) : x.Message;
-            MessageBox.Show(message);
+            SnackbarMessageQueue.Enqueue(message);
         });
 
         result.IfSucc(x =>
         {
-            MessageBox.Show("Успешно");
+            SnackbarMessageQueue.Enqueue("Успешно");
             _navigationService.PopAndNavigate<AuthorizationViewModel>();
         });
     }

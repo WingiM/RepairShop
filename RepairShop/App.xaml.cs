@@ -13,6 +13,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Linq;
+using RepairShop.Stores;
 
 namespace RepairShop;
 
@@ -39,6 +40,7 @@ public partial class App
     private void ConfigurePresentation(IServiceCollection services)
     {
         services.AddSingleton<NavigationService>();
+        services.AddSingleton<AuthorizedUserStore>();
 
         services.AddViewModelFactory<AuthorizationViewModel>();
         services.AddViewModelFactory<RegisterViewModel>();

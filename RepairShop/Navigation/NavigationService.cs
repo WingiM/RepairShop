@@ -48,6 +48,18 @@ public class NavigationService
         CurrentViewModel = viewModel;
     }
 
+    public void ClearAndNavigate<TViewModel>() where TViewModel : BaseViewModel
+    {
+        while (_routeHistory.Count > 0)
+        {
+            _routeHistory.Pop();
+        }
+        _routeHistory.Push(CurrentViewModel);
+        var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
+        var viewModel = viewModelFactory.GetControl();
+        CurrentViewModel = viewModel;
+    }
+
     public void GoBack()
     {
         if (!CanGoBack) return;
