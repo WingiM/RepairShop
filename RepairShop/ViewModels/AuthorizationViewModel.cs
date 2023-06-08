@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
+using RepairShop.Data.Enums;
 using RepairShop.Navigation;
 using RepairShop.Services;
 using RepairShop.Stores;
@@ -45,7 +46,9 @@ public partial class AuthorizationViewModel : BaseViewModel
                 _authorizedUserStore.Authorize(x);
             });
             SnackbarMessageQueue.Enqueue("Успешно");
-            _navigationService.PopAndNavigate<RegisterViewModel>();
+
+            if (_authorizedUserStore.AuthorizedUser!.RoleId == (int)Roles.Client)
+                _navigationService.PopAndNavigate<ClientPageViewModel>();
             return;
         }
 

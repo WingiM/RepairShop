@@ -44,6 +44,7 @@ public partial class App
 
         services.AddViewModelFactory<AuthorizationViewModel>();
         services.AddViewModelFactory<RegisterViewModel>();
+        services.AddViewModelFactory<ClientPageViewModel>();
         services.AddSingleton<MainViewModel>();
 
         services.AddSingleton(typeof(MainWindow));
@@ -69,7 +70,7 @@ public partial class App
 
         var context = serviceProvider.GetRequiredService<ApplicationContext>();
         // warmup query
-        context.Users.ToList();
+        context.Database.ExecuteSql($"SELECT 1 FROM user");
         var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }

@@ -33,18 +33,18 @@ public class NavigationService
 
     public void Navigate<TViewModel>() where TViewModel : BaseViewModel
     {
-        _routeHistory.Push(CurrentViewModel);
         var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
         var viewModel = viewModelFactory.GetControl();
+        _routeHistory.Push(viewModel);
         CurrentViewModel = viewModel;
     }
 
     public void PopAndNavigate<TViewModel>() where TViewModel : BaseViewModel
     {
         _routeHistory.Pop();
-        _routeHistory.Push(CurrentViewModel);
         var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
         var viewModel = viewModelFactory.GetControl();
+        _routeHistory.Push(viewModel);
         CurrentViewModel = viewModel;
     }
 
@@ -54,17 +54,17 @@ public class NavigationService
         {
             _routeHistory.Pop();
         }
-        _routeHistory.Push(CurrentViewModel);
         var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
         var viewModel = viewModelFactory.GetControl();
+        _routeHistory.Push(viewModel);
         CurrentViewModel = viewModel;
     }
 
     public void GoBack()
     {
         if (!CanGoBack) return;
-        var viewModel = _routeHistory.Pop();
-        CurrentViewModel = viewModel;
+        _routeHistory.Pop();
+        CurrentViewModel = _routeHistory.Peek();
     }
 
     public event Action? CurrentViewModelChanged;

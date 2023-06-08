@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace RepairShop.ViewModels;
 
-public class ClientPageViewModel : BaseViewModel
+public partial class ClientPageViewModel : BaseViewModel
 {
+    public ClientPageViewModel()
+    {
+        ViewModelTitle = "Главная";
+    }
 }
