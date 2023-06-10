@@ -16,5 +16,7 @@ public class RepairRequest
 
     public virtual User? Master { get; set; }
 
+    public RequestStatus? ActualStatus => StatusHistories.FirstOrDefault(x => x.IsActual)?.Status;
+
     public virtual ICollection<StatusHistory> StatusHistories { get; set; } = new List<StatusHistory>();
 }

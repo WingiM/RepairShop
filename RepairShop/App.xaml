@@ -1,7 +1,8 @@
 ﻿<Application x:Class="RepairShop.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:cv="clr-namespace:RepairShop.Views.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,6 +13,7 @@
             <SolidColorBrush x:Key="SecondaryColor" Color="#BDBDBD"/>
             <SolidColorBrush x:Key="AccentColor" Color="#FF4F6F"/>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <cv:GridInListViewWithConverter x:Key="GridInListViewWithConverter"/>
             <Style x:Key="GoBackButton" TargetType="Button">
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">

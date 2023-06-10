@@ -15,39 +15,62 @@
         ui:TitleBar.BackButtonCommand="{Binding GoBackCommand}">
     <Grid Background="{StaticResource PrimaryColor}">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="9*"/>
+            <RowDefinition />
+            <RowDefinition Height="9*" />
         </Grid.RowDefinitions>
-        <StackPanel Background="{StaticResource SecondaryColor}" HorizontalAlignment="Stretch" Orientation="Horizontal">
-            <Image Margin="20 2 10 2" Source="/Images/tools.png" />
-            <Label FontSize="18" VerticalAlignment="Center">Ремонтная мастерская</Label>
+        <StackPanel Background="{StaticResource SecondaryColor}"
+                    HorizontalAlignment="Stretch"
+                    Orientation="Horizontal">
+            <Image Margin="20 2 10 2"
+                   Source="/Images/tools.png" />
+            <Label FontSize="18"
+                   VerticalAlignment="Center" Content="Ремонтная мастерская" />
         </StackPanel>
-        <Button HorizontalAlignment="Right" Background="{StaticResource AccentColor}" Height="50" Width="50" 
-                Margin="0 0 15 0" Foreground="White" Command="{Binding GoToUserPageCommand}"
-                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" >
+        <Button HorizontalAlignment="Right"
+                Background="{StaticResource AccentColor}"
+                Height="50"
+                Width="50"
+                Margin="0 0 15 0"
+                Foreground="White"
+                Command="{Binding GoToUserPageCommand}"
+                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Grid>
-                    <Ellipse Fill="{StaticResource AccentColor}"/>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding UserLetter}"/>
+                        <Ellipse Fill="{StaticResource AccentColor}" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding UserLetter}" />
                     </Grid>
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock Grid.Row="0" Margin="20 0 0 0" Text="{Binding CurrentViewModel.ViewModelTitle}" x:Name="TitleTb" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Margin="20 0 0 0"
+                   Text="{Binding CurrentViewModel.ViewModelTitle}"
+                   VerticalAlignment="Center"
+                   FontSize="18"
+                   HorizontalAlignment="Center" />
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type vms:AuthorizationViewModel}">
-                    <views:AuthorizationPage/>
+                    <views:AuthorizationPage />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vms:RegisterViewModel}">
-                    <views:RegistrationPage/>
+                    <views:RegistrationPage />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vms:ClientPageViewModel}">
-                    <views:ClientPage/>
+                    <views:ClientPage />
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
-        <material:Snackbar Background="{StaticResource AccentColor}" Foreground="White" Grid.Row="1" MessageQueue="{Binding CurrentViewModel.SnackbarMessageQueue}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0" MinWidth="200" MinHeight="60"/>
+        <material:Snackbar Grid.Row="1"
+                           Background="{StaticResource AccentColor}"
+                           Foreground="White"
+                           MessageQueue="{Binding CurrentViewModel.SnackbarMessageQueue}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Bottom"
+                           Margin="0"
+                           MinWidth="200"
+                           MinHeight="60" />
     </Grid>
 </Window>

@@ -40,7 +40,12 @@ public class RequestService : IRequestService
         if (existingClient is null || existingClient.RoleId != (int)Roles.Client)
             return new Result<IEnumerable<RepairRequest>>(new Exception(ValidationErrorMessages.UserIsNotClient));
 
-        return new Result<IEnumerable<RepairRequest>>(_context.RepairRequests.Where(x => x.ClientId == clientId));
+        var result = _context.RepairRequests
+            .Where(x => x.ClientId == clientId)
+            .Include(x => x.StatusHistories.Where(x => x.IsActual))
+            .ThenInclude(x => x.Status)
+            .Include(x => x.Master);
+        return new Result<IEnumerable<RepairRequest>>(result);
     }
 
     /// <summary>

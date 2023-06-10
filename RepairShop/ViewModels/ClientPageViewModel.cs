@@ -16,6 +16,7 @@ public partial class ClientPageViewModel : BaseViewModel
 
     public ICommand CreateRequestCommand { get; set; }
     public ICommand SeeRequestHistoryCommand { get; set; }
+    public RelayCommand<int> GoToRequestCommand { get; set; }
 
     public ClientPageViewModel(NavigationService navigationService, 
         AuthorizedUserStore authorizedUserStore, 
@@ -28,11 +29,17 @@ public partial class ClientPageViewModel : BaseViewModel
 
         CreateRequestCommand = new RelayCommand(Console.WriteLine, () => true);
         SeeRequestHistoryCommand = new RelayCommand(Console.WriteLine, () => true);
+        GoToRequestCommand = new RelayCommand<int>(OpenRequest, x => true);
     }
 
     public override void OnNavigatedTo()
     {
         GetClientRequests();
+    }
+
+    private void OpenRequest(int id)
+    {
+
     }
 
     private void GetClientRequests()
