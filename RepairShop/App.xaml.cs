@@ -37,6 +37,7 @@ public partial class App
 
     private void ConfigurePresentation(IServiceCollection services)
     {
+        services.AddSingleton<RouteMap>();
         services.AddSingleton<NavigationService>();
         services.AddSingleton<AuthorizedUserStore>();
 

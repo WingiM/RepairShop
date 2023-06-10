@@ -42,7 +42,7 @@ public class RequestService : IRequestService
 
         var result = _context.RepairRequests
             .Where(x => x.ClientId == clientId)
-            .Include(x => x.StatusHistories.Where(x => x.IsActual))
+            .Include(x => x.StatusHistories.Where(z => z.IsActual))
             .ThenInclude(x => x.Status)
             .Include(x => x.Master);
         return new Result<IEnumerable<RepairRequest>>(result);

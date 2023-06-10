@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RepairShop.Attributes;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop.ViewModels;
 
+[Route(Route = Routes.Authorization)]
 public partial class AuthorizationViewModel : AuthorizationBaseViewModel
 {
     private readonly IAuthorizationService _authorizationService;
@@ -21,7 +23,7 @@ public partial class AuthorizationViewModel : AuthorizationBaseViewModel
     {
         _authorizationService = authorizationService;
         ViewModelTitle = "Авторизация";
-        RegisterCommand = new RelayCommand(() => navigationService.PopAndNavigate<RegisterViewModel>(), () => true);
+        RegisterCommand = new RelayCommand(() => navigationService.PopAndNavigate(Routes.Registration), () => true);
         AuthorizeCommand = new RelayCommand(() => Authorize(), () => true);
     }
 

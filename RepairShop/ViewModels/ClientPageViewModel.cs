@@ -2,10 +2,12 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RepairShop.Attributes;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop.ViewModels;
 
+[Route(Route = Routes.ClientPage)]
 public partial class ClientPageViewModel : BaseViewModel
 {
     private readonly AuthorizedUserStore _authorizedUserStore;
@@ -29,17 +31,17 @@ public partial class ClientPageViewModel : BaseViewModel
 
         CreateRequestCommand = new RelayCommand(Console.WriteLine, () => true);
         SeeRequestHistoryCommand = new RelayCommand(Console.WriteLine, () => true);
-        GoToRequestCommand = new RelayCommand<int>(OpenRequest, x => true);
+        GoToRequestCommand = new RelayCommand<int>(OpenRequest, _ => true);
     }
 
-    public override void OnNavigatedTo(NavigationArgs? args = null)
+    public override void OnNavigatedTo(NavigationArgs args)
     {
         GetClientRequests();
     }
 
     private void OpenRequest(int id)
     {
-        _navigationService.Navigate<ClientPageViewModel>(new NavigationArgs(new KeyValuePair<string, object>("Id", id)));
+
     }
 
     private void GetClientRequests()

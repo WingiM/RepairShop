@@ -16,9 +16,9 @@ public partial class MainWindow
         InitializeComponent();
     }
 
-    private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Window_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ChangedButton == System.Windows.Input.MouseButton.XButton1 && _viewModel.GoBackCommand.CanExecute(null))
+        if (e.ChangedButton == MouseButton.XButton1 && _viewModel.GoBackCommand.CanExecute(null))
         {
             _viewModel.GoBackCommand.Execute(null);
         }

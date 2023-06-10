@@ -1,13 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RepairShop.Attributes;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop.ViewModels;
 
+[Route(Route = Routes.Registration)]
 public partial class RegisterViewModel : AuthorizationBaseViewModel
 {
     private readonly IAuthorizationService _authorizationService;
-    private readonly NavigationService _navigationService;
 
     [ObservableProperty] private string _login = string.Empty;
 
@@ -23,10 +24,9 @@ public partial class RegisterViewModel : AuthorizationBaseViewModel
         IAuthorizationService authorizationService) : base(navigationService, authorizedUserStore)
     {
         _authorizationService = authorizationService;
-        _navigationService = navigationService;
         ViewModelTitle = "Регистрация";
         AuthorizeCommand =
-            new RelayCommand(() => navigationService.PopAndNavigate<AuthorizationViewModel>(), () => true);
+            new RelayCommand(() => navigationService.PopAndNavigate(Routes.Authorization), () => true);
         RegisterCommand = new RelayCommand(() => Register(), () => true);
     }
 

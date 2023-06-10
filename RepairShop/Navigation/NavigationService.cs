@@ -1,70 +1,72 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
+using System.Windows.Navigation;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
 
-public class NavigationService
+public class NavigationService : INavigationService
 {
-    private readonly Stack<BaseViewModel> _routeHistory;
+    private readonly Stack<KeyValuePair<string, BaseViewModel>> _routeHistory;
 
-    private BaseViewModel _currentViewModel = null!;
-    public BaseViewModel CurrentViewModel
-    {
-        get => _currentViewModel;
-        private set
-        {
-            _currentViewModel = value;
-            OnCurrentViewModelChanged();
-        }
-    }
+    public BaseViewModel CurrentViewModel { get; private set; } = null!;
 
     public bool CanGoBack => _routeHistory.Length() != 1;
 
     private readonly IServiceProvider _serviceProvider;
+    private readonly RouteMap _routeMap;
 
-    public NavigationService(IServiceProvider serviceProvider)
+    public NavigationService(IServiceProvider serviceProvider, RouteMap routeMap)
     {
-        _routeHistory = new Stack<BaseViewModel>();
+        _routeHistory = new Stack<KeyValuePair<string, BaseViewModel>>();
         _serviceProvider = serviceProvider;
+        _routeMap = routeMap;
     }
 
-    public void Navigate<TViewModel>(NavigationArgs? args = null) where TViewModel : BaseViewModel
+    public bool Navigate(string path, DynamicDictionary? parameters = null)
     {
-        var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
-        var viewModel = viewModelFactory.GetViewModel();
-        _routeHistory.Push(viewModel);
-        viewModel.OnNavigatedTo(args);
-        CurrentViewModel = viewModel;
+        if (!PathExists(path)) return false;
+
+        var viewModelType = _routeMap[path]!;
+        if (_serviceProvider.GetService(viewModelType) is not BaseViewModel viewModel)
+            return false;
+
+        var args = new NavigationArgs { Destination = path, Parameters = parameters ?? new DynamicDictionary() };
+        _routeHistory.Push(new KeyValuePair<string, BaseViewModel>(path, viewModel));
+        NavigateInternal(viewModel, args);
+        return true;
     }
 
-    public void PopAndNavigate<TViewModel>(NavigationArgs? args = null) where TViewModel : BaseViewModel
+    public bool PopAndNavigate(string path, DynamicDictionary? parameters = null)
     {
+        if (!PathExists(path)) return false;
         _routeHistory.Pop();
-        Navigate<TViewModel>(args);
+        return Navigate(path, parameters);
     }
 
-    public void ClearAndNavigate<TViewModel>(NavigationArgs? args = null) where TViewModel : BaseViewModel
+    public bool ClearAndNavigate(string path, DynamicDictionary? parameters = null)
     {
-        while (_routeHistory.Count > 0)
-        {
-            _routeHistory.Pop();
-        }
-        Navigate<TViewModel>(args);
+        if (!PathExists(path)) return false;
+        _routeHistory.Clear();
+        return Navigate(path, parameters);
     }
 
     public void GoBack()
     {
         if (!CanGoBack) return;
         _routeHistory.Pop();
-        CurrentViewModel = _routeHistory.Peek();
-        CurrentViewModel.OnNavigatedTo();
+        var viewModel = _routeHistory.Peek();
+        var args = new NavigationArgs { Destination = viewModel.Key, NavigationMode = NavigationMode.Back };
+        NavigateInternal(viewModel.Value, args);
     }
 
-    public event Action? CurrentViewModelChanged;
-
-    private void OnCurrentViewModelChanged()
+    private void NavigateInternal(BaseViewModel viewModel, NavigationArgs args)
     {
-        CurrentViewModelChanged?.Invoke();
+        viewModel.OnNavigatedTo(args);
+        CurrentViewModel = viewModel;
+        OnNavigated?.Invoke(args);
     }
+
+    private bool PathExists(string path) => _routeMap[path] is not null;
+
+    public event Action<NavigationArgs>? OnNavigated;
 }
