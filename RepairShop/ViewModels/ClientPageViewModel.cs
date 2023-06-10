@@ -32,14 +32,14 @@ public partial class ClientPageViewModel : BaseViewModel
         GoToRequestCommand = new RelayCommand<int>(OpenRequest, x => true);
     }
 
-    public override void OnNavigatedTo()
+    public override void OnNavigatedTo(NavigationArgs? args = null)
     {
         GetClientRequests();
     }
 
     private void OpenRequest(int id)
     {
-
+        _navigationService.Navigate<ClientPageViewModel>(new NavigationArgs(new KeyValuePair<string, object>("Id", id)));
     }
 
     private void GetClientRequests()

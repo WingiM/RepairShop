@@ -12,5 +12,5 @@ public class ViewModelFactory<TViewModel> where TViewModel : BaseViewModel
         _factoryMethod = factoryMethod;
     }
 
-    public TViewModel GetControl() => _factoryMethod();
+    public TViewModel GetViewModel() => _factoryMethod();
 }

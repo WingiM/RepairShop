@@ -18,7 +18,7 @@ public abstract partial class BaseViewModel : ObservableObject
         SnackbarMessageQueue = new SnackbarMessageQueue();
     }
 
-    public virtual void OnNavigatedTo()
+    public virtual void OnNavigatedTo(NavigationArgs? args = null)
     {
         
     }

@@ -15,7 +15,6 @@ public class NavigationService
         private set
         {
             _currentViewModel = value;
-            _currentViewModel.OnNavigatedTo();
             OnCurrentViewModelChanged();
         }
     }
@@ -30,33 +29,28 @@ public class NavigationService
         _serviceProvider = serviceProvider;
     }
 
-    public void Navigate<TViewModel>() where TViewModel : BaseViewModel
+    public void Navigate<TViewModel>(NavigationArgs? args = null) where TViewModel : BaseViewModel
     {
         var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
-        var viewModel = viewModelFactory.GetControl();
+        var viewModel = viewModelFactory.GetViewModel();
         _routeHistory.Push(viewModel);
+        viewModel.OnNavigatedTo(args);
         CurrentViewModel = viewModel;
     }
 
-    public void PopAndNavigate<TViewModel>() where TViewModel : BaseViewModel
+    public void PopAndNavigate<TViewModel>(NavigationArgs? args = null) where TViewModel : BaseViewModel
     {
         _routeHistory.Pop();
-        var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
-        var viewModel = viewModelFactory.GetControl();
-        _routeHistory.Push(viewModel);
-        CurrentViewModel = viewModel;
+        Navigate<TViewModel>(args);
     }
 
-    public void ClearAndNavigate<TViewModel>() where TViewModel : BaseViewModel
+    public void ClearAndNavigate<TViewModel>(NavigationArgs? args = null) where TViewModel : BaseViewModel
     {
         while (_routeHistory.Count > 0)
         {
             _routeHistory.Pop();
         }
-        var viewModelFactory = _serviceProvider.GetRequiredService<ViewModelFactory<TViewModel>>();
-        var viewModel = viewModelFactory.GetControl();
-        _routeHistory.Push(viewModel);
-        CurrentViewModel = viewModel;
+        Navigate<TViewModel>(args);
     }
 
     public void GoBack()
@@ -64,6 +58,7 @@ public class NavigationService
         if (!CanGoBack) return;
         _routeHistory.Pop();
         CurrentViewModel = _routeHistory.Peek();
+        CurrentViewModel.OnNavigatedTo();
     }
 
     public event Action? CurrentViewModelChanged;
