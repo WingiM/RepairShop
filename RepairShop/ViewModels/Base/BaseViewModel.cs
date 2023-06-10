@@ -11,11 +11,16 @@ public abstract partial class BaseViewModel : ObservableObject
     private string _viewModelTitle = "Ремонтная мастерская";
 
     [ObservableProperty]
-    private SnackbarMessageQueue _snackbarMessageQueue;
+    private SnackbarMessageQueue _snackbarMessageQueue = null!;
 
     protected BaseViewModel()
     {
         SnackbarMessageQueue = new SnackbarMessageQueue();
+    }
+
+    public virtual void OnNavigatedTo()
+    {
+        
     }
 
     protected void PushErrorToSnackbar(Exception ex)

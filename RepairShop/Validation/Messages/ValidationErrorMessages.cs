@@ -4,6 +4,7 @@ public static class ValidationErrorMessages
 {
     public const string UserDoesNotExist = "Указанного пользователя не существует в системе";
     public const string UserIsNotMaster = "Указанный пользователь не является мастером";
+    public const string UserIsNotClient = "Указанный пользователь не является клиентом";
     public const string ClientDoesNotExist = "Такого клиента нет в системе";
     
     public const string PasswordsDoNotMatch = "Пароли не совпадают";

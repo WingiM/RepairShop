@@ -16,15 +16,18 @@ public abstract partial class AuthorizationBaseViewModel : BaseViewModel
 
     protected void HandleAuthorizationResult(Result<User> authorizationResult)
     {
-        if (authorizationResult.IsSuccess)
-        {
-            authorizationResult.IfSucc(_authorizedUserStore.Authorize);
-
-            if (_authorizedUserStore.AuthorizedUser!.RoleId == (int)Roles.Client)
-                _navigationService.PopAndNavigate<ClientPageViewModel>();
-            return;
-        }
-
+        authorizationResult.IfSucc(HandleAuthorizationSuccess);
         authorizationResult.IfFail(PushErrorToSnackbar);
+    }
+
+    private void HandleAuthorizationSuccess(User user)
+    {
+        _authorizedUserStore.Authorize(user);
+        switch (user.RoleId)
+        {
+            case (int)Roles.Client:
+                _navigationService.PopAndNavigate<ClientPageViewModel>();
+                break;
+        }
     }
 }

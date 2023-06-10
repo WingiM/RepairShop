@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
@@ -16,6 +15,7 @@ public class NavigationService
         private set
         {
             _currentViewModel = value;
+            _currentViewModel.OnNavigatedTo();
             OnCurrentViewModelChanged();
         }
     }

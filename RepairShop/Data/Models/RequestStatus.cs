@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RepairShop.Data.Models;
+﻿namespace RepairShop.Data.Models;
 
 public class RequestStatus
 {
