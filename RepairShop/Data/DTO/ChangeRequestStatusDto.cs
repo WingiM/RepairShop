@@ -1,6 +1,4 @@
-﻿using RepairShop.Data.Enums;
-
-namespace RepairShop.Data.DTO;
+﻿namespace RepairShop.Data.DTO;
 
 public class ChangeRequestStatusDto
 {

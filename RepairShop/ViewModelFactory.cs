@@ -1,5 +1,5 @@
-﻿using RepairShop.ViewModels;
-using System;
+﻿using System;
+using RepairShop.ViewModels.Base;
 
 namespace RepairShop;
 

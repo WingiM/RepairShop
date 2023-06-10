@@ -7,7 +7,7 @@ namespace RepairShop.Views;
 /// </summary>
 public partial class MainWindow
 {
-    private MainViewModel _viewModel;
+    private readonly MainViewModel _viewModel;
 
     public MainWindow(MainViewModel viewModel)
     {

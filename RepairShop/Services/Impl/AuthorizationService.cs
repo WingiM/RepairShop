@@ -1,12 +1,7 @@
 ﻿using FluentValidation;
 using LanguageExt.Common;
 using Microsoft.Extensions.DependencyInjection;
-using RepairShop.Data;
-using RepairShop.Data.DTO;
-using RepairShop.Data.Enums;
-using RepairShop.Data.Models;
 using System;
-using System.Linq;
 
 namespace RepairShop.Services.Impl;
 

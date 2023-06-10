@@ -2,18 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RepairShop.Data;
 using RepairShop.Extensions;
-using RepairShop.Services;
 using RepairShop.Services.Impl;
-using RepairShop.Navigation;
 using RepairShop.ViewModels;
 using RepairShop.Views;
 using System.Globalization;
 using System.IO;
 using System.Windows;
-using System.Linq;
-using RepairShop.Stores;
 
 namespace RepairShop;
 
@@ -26,6 +21,7 @@ public partial class App
     {
         services.AddValidatorsFromAssembly(typeof(App).Assembly);
         services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRequestService, RequestService>();
         services.AddDbContext<ApplicationContext>(options =>
         {
@@ -33,7 +29,9 @@ public partial class App
                 npgsqlOptions => npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
+
         services.AddSingleton(configuration);
+
         ConfigurePresentation(services);
     }
 
@@ -58,8 +56,8 @@ public partial class App
         CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
         var builder = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
         var configuration = builder.Build();
 

@@ -7,7 +7,8 @@ namespace RepairShop.Views.Behaviors;
 public class PasswordBehavior : Behavior<PasswordBox>
 {
     public static readonly DependencyProperty PasswordProperty =
-        DependencyProperty.Register("Password", typeof(string), typeof(PasswordBehavior), new PropertyMetadata(default(string)));
+        DependencyProperty.Register("Password", typeof(string), typeof(PasswordBehavior),
+            new PropertyMetadata(default(string)));
 
     private bool _skipUpdate;
 
@@ -31,15 +32,11 @@ public class PasswordBehavior : Behavior<PasswordBox>
     {
         base.OnPropertyChanged(e);
 
-        if (e.Property == PasswordProperty)
-        {
-            if (!_skipUpdate)
-            {
-                _skipUpdate = true;
-                AssociatedObject.Password = e.NewValue as string;
-                _skipUpdate = false;
-            }
-        }
+        if (e.Property != PasswordProperty) return;
+        if (_skipUpdate) return;
+        _skipUpdate = true;
+        AssociatedObject.Password = e.NewValue as string;
+        _skipUpdate = false;
     }
 
     private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

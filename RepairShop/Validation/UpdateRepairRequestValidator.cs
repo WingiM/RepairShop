@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using RepairShop.Data;
-using RepairShop.Data.DTO;
 
 namespace RepairShop.Validation;
 
@@ -10,19 +8,25 @@ public class UpdateRepairRequestValidator : AbstractValidator<UpdateRepairReques
     {
         RuleFor(x => x.Description)
             .NotNull()
+            .WithMessage(ValidationErrorMessages.RepairRequestDescriptionCannotBeEmpty)
             .NotEmpty()
-            .MaximumLength(1000);
+            .WithMessage(ValidationErrorMessages.RepairRequestDescriptionCannotBeEmpty)
+            .MaximumLength(1000)
+            .WithMessage(ValidationErrorMessages.RepairRequestDescriptionCannotBeMoreThan1000Symbols);
 
         RuleFor(x => x.ShortName)
             .NotNull()
+            .WithMessage(ValidationErrorMessages.RepairRequestNameCannotBeEmpty)
             .NotEmpty()
-            .MaximumLength(50);
+            .WithMessage(ValidationErrorMessages.RepairRequestNameCannotBeEmpty)
+            .MaximumLength(50)
+            .WithMessage(ValidationErrorMessages.RepairRequestNameCannotBeMoreThan50Symbols);
 
         RuleFor(x => x.RequestId)
             .Must(x => context.RepairRequests.Find(x) is not null)
-            .WithMessage("Указанного заказа не существует в системе")
+            .WithMessage(ValidationErrorMessages.RepairRequestDoesNotExist)
             .Must(x => context.RepairRequests.Find(x)!.MasterId == null)
-            .WithMessage("Нельзя отредактировать запрос на ремонт, когда он передан мастеру");
+            .WithMessage(ValidationErrorMessages.CannotEditRepairRequest);
 
     }
 }

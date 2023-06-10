@@ -1,8 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Extensions.DependencyInjection;
-using RepairShop.ViewModels;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
 

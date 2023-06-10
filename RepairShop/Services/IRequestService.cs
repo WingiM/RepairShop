@@ -1,6 +1,4 @@
 ﻿using LanguageExt.Common;
-using RepairShop.Data.DTO;
-using RepairShop.Data.Models;
 using System.Collections.Generic;
 
 namespace RepairShop.Services;

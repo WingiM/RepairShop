@@ -1,8 +1,4 @@
 ﻿using FluentValidation;
-using RepairShop.Data;
-using RepairShop.Data.DTO;
-using RepairShop.Data.Enums;
-using System.Linq;
 
 namespace RepairShop.Validation;
 
@@ -12,17 +8,23 @@ public class CreateRepairRequestValidator : AbstractValidator<CreateRepairReques
     {
         RuleFor(x => x.Description)
             .NotNull()
+            .WithMessage(ValidationErrorMessages.RepairRequestDescriptionCannotBeEmpty)
             .NotEmpty()
-            .MaximumLength(1000);
+            .WithMessage(ValidationErrorMessages.RepairRequestDescriptionCannotBeEmpty)
+            .MaximumLength(1000)
+            .WithMessage(ValidationErrorMessages.RepairRequestDescriptionCannotBeMoreThan1000Symbols);
 
         RuleFor(x => x.ShortName)
             .NotNull()
+            .WithMessage(ValidationErrorMessages.RepairRequestNameCannotBeEmpty)
             .NotEmpty()
-            .MaximumLength(50);
+            .WithMessage(ValidationErrorMessages.RepairRequestNameCannotBeEmpty)
+            .MaximumLength(50)
+            .WithMessage(ValidationErrorMessages.RepairRequestNameCannotBeMoreThan50Symbols);
 
         RuleFor(x => x.ClientId)
             .NotNull()
             .Must(x => context.Users.Any(z => z.Id == x && z.RoleId == (int)Roles.Client))
-            .WithMessage("Такого клиента нет в системе");
+            .WithMessage(ValidationErrorMessages.ClientDoesNotExist);
     }
 }

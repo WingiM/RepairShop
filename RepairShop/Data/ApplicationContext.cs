@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RepairShop.Data.Models;
 
 namespace RepairShop.Data;
 

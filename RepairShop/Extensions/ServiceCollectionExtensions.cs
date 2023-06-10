@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RepairShop.ViewModels;
+using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Extensions;
 

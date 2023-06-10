@@ -1,9 +1,4 @@
-﻿using RepairShop.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace RepairShop.Stores;
 
@@ -21,12 +16,12 @@ public class AuthorizedUserStore
         OnAuthorized?.Invoke(user);
     }
 
-    public void LogOut()
+    public void Logout()
     {
         AuthorizedUser = null;
-        OnLogOut?.Invoke();
+        OnLogout?.Invoke();
     }
 
     public event Action<User>? OnAuthorized;
-    public event Action? OnLogOut;
+    public event Action? OnLogout;
 }
