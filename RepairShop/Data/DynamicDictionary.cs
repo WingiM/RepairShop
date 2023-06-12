@@ -1,4 +1,6 @@
-﻿namespace RepairShop.Data;
+﻿using System;
+
+namespace RepairShop.Data;
 
 public class DynamicDictionary
 {
@@ -7,6 +9,11 @@ public class DynamicDictionary
     public DynamicDictionary(Dictionary<string, object>? baseParameters = null)
     {
         _parameters = baseParameters ?? new Dictionary<string, object>();
+    }
+
+    public DynamicDictionary(params (string, object)[] baseParmeters)
+    {
+        _parameters = baseParmeters.ToDictionary(x => x.Item1, x => x.Item2);
     }
 
     public T? GetValue<T>(string key)

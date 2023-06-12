@@ -61,6 +61,9 @@
                 <DataTemplate DataType="{x:Type vms:ClientPageViewModel}">
                     <views:ClientPage />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:RequestPageViewModel}">
+                    <views:RequestPage />
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
         <material:Snackbar Grid.Row="1"

@@ -8,16 +8,15 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly INavigationService _navigationService;
 
-    [ObservableProperty]
-    private string _userLetter = string.Empty;
+    [ObservableProperty] private string _userLetter = string.Empty;
 
     public BaseViewModel CurrentViewModel => _navigationService.CurrentViewModel;
 
     public RelayCommand GoBackCommand { get; set; }
     public RelayCommand GoToUserPageCommand { get; set; }
 
-    public MainViewModel(INavigationService navigationService, 
-        AuthorizedUserStore authorizedUserStore, 
+    public MainViewModel(INavigationService navigationService,
+        AuthorizedUserStore authorizedUserStore,
         IUserService userService)
     {
         authorizedUserStore.OnAuthorized += AuthorizedUserStore_OnAuthorized;
@@ -27,7 +26,8 @@ public partial class MainViewModel : ObservableObject
         _navigationService.OnNavigated += OnNavigated;
 
         GoBackCommand = new RelayCommand(() => navigationService.GoBack(), () => navigationService.CanGoBack);
-        GoToUserPageCommand = new RelayCommand(() => navigationService.Navigate(Routes.Authorization), () => authorizedUserStore.IsAuthorized);
+        GoToUserPageCommand = new RelayCommand(() => navigationService.Navigate(Routes.Authorization),
+            () => authorizedUserStore.IsAuthorized);
 
         var authorizedUserId = Properties.Settings.Default.LoggedUserId;
         var user = userService.GetUser(authorizedUserId);
@@ -38,6 +38,7 @@ public partial class MainViewModel : ObservableObject
                 _navigationService.Navigate(Routes.ClientPage);
             return;
         }
+
         _navigationService.Navigate(Routes.Authorization);
     }
 
@@ -56,8 +57,14 @@ public partial class MainViewModel : ObservableObject
         GoToUserPageCommand.NotifyCanExecuteChanged();
     }
 
-    private void OnNavigated(NavigationArgs args)
+    private void OnNavigated(NavigationResult result)
     {
+        if (!result.IsSuccess)
+        {
+            CurrentViewModel.WriteToSnackBar(result.Message ?? "Произошла ошибка при навигации");
+            return;
+        }
+
         OnPropertyChanged(nameof(CurrentViewModel));
         GoBackCommand.NotifyCanExecuteChanged();
     }

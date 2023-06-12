@@ -20,8 +20,8 @@ public partial class ClientPageViewModel : BaseViewModel
     public ICommand SeeRequestHistoryCommand { get; set; }
     public RelayCommand<int> GoToRequestCommand { get; set; }
 
-    public ClientPageViewModel(INavigationService navigationService, 
-        AuthorizedUserStore authorizedUserStore, 
+    public ClientPageViewModel(INavigationService navigationService,
+        AuthorizedUserStore authorizedUserStore,
         IRequestService requestService)
     {
         ViewModelTitle = "Главная";
@@ -29,19 +29,21 @@ public partial class ClientPageViewModel : BaseViewModel
         _authorizedUserStore = authorizedUserStore;
         _requestService = requestService;
 
-        CreateRequestCommand = new RelayCommand(Console.WriteLine, () => true);
+        CreateRequestCommand = new RelayCommand(() => OpenRequest(default, true), () => true);
         SeeRequestHistoryCommand = new RelayCommand(Console.WriteLine, () => true);
-        GoToRequestCommand = new RelayCommand<int>(OpenRequest, _ => true);
+        GoToRequestCommand = new RelayCommand<int>(x => OpenRequest(x, false), _ => true);
     }
 
-    public override void OnNavigatedTo(NavigationArgs args)
+    public override NavigationResult OnNavigatedTo(NavigationArgs args)
     {
         GetClientRequests();
+        return base.OnNavigatedTo(args);
     }
 
-    private void OpenRequest(int id)
+    private void OpenRequest(int id, bool isCreate)
     {
-
+        _navigationService.Navigate(Routes.Request,
+            parameters: new DynamicDictionary((nameof(id), 5), (nameof(isCreate), isCreate)));
     }
 
     private void GetClientRequests()

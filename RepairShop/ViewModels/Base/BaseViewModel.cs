@@ -18,16 +18,21 @@ public abstract partial class BaseViewModel : ObservableObject
         SnackbarMessageQueue = new SnackbarMessageQueue();
     }
 
-    public virtual void OnNavigatedTo(NavigationArgs args)
+    public virtual NavigationResult OnNavigatedTo(NavigationArgs args)
     {
-        
+        return new NavigationResult { IsSuccess = true, NavigationArgs = args };
     }
 
-    protected void PushErrorToSnackbar(Exception ex)
+    public void PushErrorToSnackbar(Exception ex)
     {
         var message = ex is ValidationException vex
             ? string.Join('\n', vex.Errors.Select(z => z.ErrorMessage))
             : ex.Message;
+        WriteToSnackBar(message);
+    }
+
+    public void WriteToSnackBar(string message)
+    {
         SnackbarMessageQueue.Enqueue(message);
     }
 }

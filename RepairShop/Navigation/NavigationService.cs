@@ -8,6 +8,13 @@ public class NavigationService : INavigationService
 {
     private readonly Stack<KeyValuePair<string, BaseViewModel>> _routeHistory;
 
+    private readonly Dictionary<NavigationMethod, Action<Stack<KeyValuePair<string, BaseViewModel>>>>
+        _navigationMethodCallbacks = new()
+        {
+            { NavigationMethod.Pop, x => x.Pop() },
+            { NavigationMethod.Clear, x => x.Clear() },
+        };
+
     public BaseViewModel CurrentViewModel { get; private set; } = null!;
 
     public bool CanGoBack => _routeHistory.Length() != 1;
@@ -22,32 +29,19 @@ public class NavigationService : INavigationService
         _routeMap = routeMap;
     }
 
-    public bool Navigate(string path, DynamicDictionary? parameters = null)
+    public NavigationResult Navigate(string path, DynamicDictionary? parameters = null)
     {
-        if (!PathExists(path)) return false;
-
-        var viewModelType = _routeMap[path]!;
-        if (_serviceProvider.GetService(viewModelType) is not BaseViewModel viewModel)
-            return false;
-
-        var args = new NavigationArgs { Destination = path, Parameters = parameters ?? new DynamicDictionary() };
-        _routeHistory.Push(new KeyValuePair<string, BaseViewModel>(path, viewModel));
-        NavigateInternal(viewModel, args);
-        return true;
+        return NavigateInternal(path, NavigationMethod.Default, parameters);
     }
 
-    public bool PopAndNavigate(string path, DynamicDictionary? parameters = null)
+    public NavigationResult PopAndNavigate(string path, DynamicDictionary? parameters = null)
     {
-        if (!PathExists(path)) return false;
-        _routeHistory.Pop();
-        return Navigate(path, parameters);
+        return NavigateInternal(path, NavigationMethod.Pop, parameters);
     }
 
-    public bool ClearAndNavigate(string path, DynamicDictionary? parameters = null)
+    public NavigationResult ClearAndNavigate(string path, DynamicDictionary? parameters = null)
     {
-        if (!PathExists(path)) return false;
-        _routeHistory.Clear();
-        return Navigate(path, parameters);
+        return NavigateInternal(path, NavigationMethod.Clear, parameters);
     }
 
     public void GoBack()
@@ -56,17 +50,44 @@ public class NavigationService : INavigationService
         _routeHistory.Pop();
         var viewModel = _routeHistory.Peek();
         var args = new NavigationArgs { Destination = viewModel.Key, NavigationMode = NavigationMode.Back };
-        NavigateInternal(viewModel.Value, args);
+
+        var result = viewModel.Value.OnNavigatedTo(args);
+        CurrentViewModel = viewModel.Value;
+
+        OnNavigated?.Invoke(result);
     }
 
-    private void NavigateInternal(BaseViewModel viewModel, NavigationArgs args)
+    private NavigationResult NavigateInternal(string path, NavigationMethod method = NavigationMethod.Default,
+        DynamicDictionary? parameters = null)
     {
-        viewModel.OnNavigatedTo(args);
-        CurrentViewModel = viewModel;
-        OnNavigated?.Invoke(args);
+        var args = new NavigationArgs { Destination = path, Parameters = parameters ?? new DynamicDictionary() };
+        if (!PathExists(path))
+            return BuildUnsuccessfulResult(args);
+
+        var viewModelType = _routeMap[path]!;
+        if (_serviceProvider.GetService(viewModelType) is not BaseViewModel viewModel)
+            return BuildUnsuccessfulResult(args);
+
+        var result = viewModel.OnNavigatedTo(args);
+
+        if (result.IsSuccess)
+        {
+            _navigationMethodCallbacks.TryGetValue(method, out var value);
+            value?.Invoke(_routeHistory);
+            _routeHistory.Push(new KeyValuePair<string, BaseViewModel>(path, viewModel));
+            CurrentViewModel = viewModel;
+        }
+
+        OnNavigated?.Invoke(result);
+
+        return result;
     }
 
     private bool PathExists(string path) => _routeMap[path] is not null;
 
-    public event Action<NavigationArgs>? OnNavigated;
+    private NavigationResult BuildUnsuccessfulResult(NavigationArgs args,
+        string message = "Такого пути не существует") =>
+        new NavigationResult { IsSuccess = false, NavigationArgs = args, Message = message };
+
+    public event Action<NavigationResult>? OnNavigated;
 }
