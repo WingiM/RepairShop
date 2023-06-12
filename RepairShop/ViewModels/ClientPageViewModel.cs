@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RepairShop.Attributes;
@@ -15,6 +16,18 @@ public partial class ClientPageViewModel : BaseViewModel
     private readonly INavigationService<BaseViewModel> _navigationService;
 
     [ObservableProperty] private ObservableCollection<RepairRequest> _repairRequests = null!;
+    [ObservableProperty] private ObservableCollection<RequestStatus> _statuses = null!;
+
+    private RequestStatus _selectedStatusFilter = null!;
+    public RequestStatus SelectedStatusFilter
+    {
+        get => _selectedStatusFilter;
+        set
+        {
+            _selectedStatusFilter = value;
+            GetClientRequests();
+        }
+    }
 
     public ICommand CreateRequestCommand { get; set; }
     public ICommand SeeRequestHistoryCommand { get; set; }
@@ -22,15 +35,25 @@ public partial class ClientPageViewModel : BaseViewModel
 
     public ClientPageViewModel(INavigationService<BaseViewModel> navigationService,
         AuthorizedUserStore authorizedUserStore,
-        IRequestService requestService)
+        IRequestService requestService,
+        ApplicationContext context)
     {
         ViewModelTitle = "Главная";
         _navigationService = navigationService;
         _authorizedUserStore = authorizedUserStore;
         _requestService = requestService;
 
+        var statuses = context.RequestStatuses
+            .Where(x => x.Id != (int)RequestStatuses.Finished)
+            .OrderBy(x => x.Id)
+            .ToList();
+        var newStatus = new RequestStatus { Id = 0, Name = "Любой" };
+        statuses.Add(newStatus);
+        _selectedStatusFilter = newStatus;
+
+        Statuses = new ObservableCollection<RequestStatus>(statuses);
         CreateRequestCommand = new RelayCommand(() => OpenRequest(default, true), () => true);
-        SeeRequestHistoryCommand = new RelayCommand(Console.WriteLine, () => true);
+        SeeRequestHistoryCommand = new RelayCommand(() => _navigationService.Navigate(Routes.ClientHistory), () => true);
         GoToRequestCommand = new RelayCommand<int>(x => OpenRequest(x, false), _ => true);
     }
 
@@ -49,7 +72,11 @@ public partial class ClientPageViewModel : BaseViewModel
     private void GetClientRequests()
     {
         var result = _requestService.ListForClient(_authorizedUserStore.AuthorizedUser!.Id);
-        result.IfSucc(x => RepairRequests = new ObservableCollection<RepairRequest>(x));
+        result.IfSucc(x =>
+        {
+            Func<RepairRequest, bool> where = _selectedStatusFilter.Id == 0 ? x => true : x => x.ActualStatus!.Id == _selectedStatusFilter.Id;
+            RepairRequests = new ObservableCollection<RepairRequest>(x.Where(where).ToList());
+        });
         result.IfFail(PushErrorToSnackbar);
     }
 }

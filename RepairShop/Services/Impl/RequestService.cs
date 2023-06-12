@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using LanguageExt.Common;
+using LanguageExt.Pipes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,8 +28,26 @@ public class RequestService : IRequestService
         if (existingMaster is null || existingMaster.RoleId != (int)Roles.Master)
             return new Result<IEnumerable<RepairRequest>>(new Exception(ValidationErrorMessages.UserIsNotMaster));
 
-        return new Result<IEnumerable<RepairRequest>>(
-            _context.RepairRequests.Where(x => x.MasterId == masterId || x.MasterId == null));
+        var result = _context.RepairRequests
+            .Where(x => x.MasterId == masterId || x.MasterId == null)
+            .Include(x => x.StatusHistories.Where(z => z.IsActual))
+            .ThenInclude(x => x.Status)
+            .Include(x => x.Client)
+            .Where(x => x.StatusHistories.First(z => z.IsActual).Status.Id != (int)RequestStatuses.Finished);
+        return new Result<IEnumerable<RepairRequest>>(result);
+    }
+
+    public Result<IEnumerable<RepairRequest>> ListArchiveForMaster(int masterId)
+    {
+        var existingMaster = _context.Users.FirstOrDefault(x => x.Id == masterId);
+        if (existingMaster is null || existingMaster.RoleId != (int)Roles.Master)
+            return new Result<IEnumerable<RepairRequest>>(new Exception(ValidationErrorMessages.UserIsNotMaster));
+
+        var result = _context.RepairRequests
+            .Where(x => x.MasterId == masterId || x.MasterId == null)
+            .Include(x => x.Client)
+            .Where(x => x.StatusHistories.First(z => z.IsActual).Status.Id == (int)RequestStatuses.Finished);
+        return new Result<IEnumerable<RepairRequest>>(result);
     }
 
     /// <summary>
@@ -44,7 +63,21 @@ public class RequestService : IRequestService
             .Where(x => x.ClientId == clientId)
             .Include(x => x.StatusHistories.Where(z => z.IsActual))
             .ThenInclude(x => x.Status)
-            .Include(x => x.Master);
+            .Include(x => x.Master)
+            .Where(x => x.StatusHistories.First(z => z.IsActual).Status.Id != (int)RequestStatuses.Finished);
+        return new Result<IEnumerable<RepairRequest>>(result);
+    }
+
+    public Result<IEnumerable<RepairRequest>> ListArchiveForClient(int clientId)
+    {
+        var existingClient = _context.Users.FirstOrDefault(x => x.Id == clientId);
+        if (existingClient is null || existingClient.RoleId != (int)Roles.Client)
+            return new Result<IEnumerable<RepairRequest>>(new Exception(ValidationErrorMessages.UserIsNotClient));
+
+        var result = _context.RepairRequests
+            .Where(x => x.ClientId == clientId)
+            .Include(x => x.Master)
+            .Where(x => x.StatusHistories.First(z => z.IsActual).Status.Id == (int)RequestStatuses.Finished);
         return new Result<IEnumerable<RepairRequest>>(result);
     }
 
@@ -87,7 +120,9 @@ public class RequestService : IRequestService
         // Set default status to a new request
         var requestStatus = new StatusHistory
         {
-            DateChanged = DateTime.Now.ToUniversalTime(), IsActual = true, Request = repairRequest,
+            DateChanged = DateTime.Now.ToUniversalTime(),
+            IsActual = true,
+            Request = repairRequest,
             StatusId = (int)RequestStatuses.AwaitsConfirmation
         };
         _context.StatusHistories.Add(requestStatus);
@@ -155,7 +190,10 @@ public class RequestService : IRequestService
 
         var requestStatus = new StatusHistory
         {
-            DateChanged = DateTime.Now.ToUniversalTime(), IsActual = true, RequestId = requestId, StatusId = (int)status
+            DateChanged = DateTime.Now.ToUniversalTime(),
+            IsActual = true,
+            RequestId = requestId,
+            StatusId = (int)status
         };
         _context.StatusHistories.Add(requestStatus);
 

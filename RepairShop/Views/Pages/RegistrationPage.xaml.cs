@@ -1,13 +1,12 @@
-﻿namespace RepairShop.Views.Pages
+﻿namespace RepairShop.Views.Pages;
+
+/// <summary>
+/// Interaction logic for RegistrationPage.xaml
+/// </summary>
+public partial class RegistrationPage
 {
-    /// <summary>
-    /// Interaction logic for RegistrationPage.xaml
-    /// </summary>
-    public partial class RegistrationPage
+    public RegistrationPage()
     {
-        public RegistrationPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

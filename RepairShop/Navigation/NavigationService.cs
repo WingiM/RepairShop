@@ -84,8 +84,12 @@ public class NavigationService<T> : INavigationService<T> where T : class, INavi
     private bool PathExists(string path) => _routeMap[path] is not null;
 
     private NavigationResult BuildUnsuccessfulResult(NavigationArgs args,
-        string message = "Такого пути не существует") =>
-        new NavigationResult { IsSuccess = false, NavigationArgs = args, Message = message };
+        string message = "Такого пути не существует")
+    {
+        var result= new NavigationResult { IsSuccess = false, NavigationArgs = args, Message = message };
+        OnNavigated?.Invoke(result);
+        return result;
+    }
 
     public event Action<NavigationResult>? OnNavigated;
 }

@@ -22,7 +22,12 @@
                     HorizontalAlignment="Stretch"
                     Orientation="Horizontal">
             <Image Margin="20 2 10 2"
-                   Source="/Images/tools.png" />
+                   Source="/Images/tools.png"
+                   Cursor="Hand">
+                <Image.InputBindings>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding GoHomeCommand}"></MouseBinding>
+                </Image.InputBindings>
+            </Image>
             <Label FontSize="18"
                    VerticalAlignment="Center" Content="Ремонтная мастерская" />
         </StackPanel>
@@ -30,6 +35,7 @@
                 Background="{StaticResource AccentColor}"
                 Height="50"
                 Width="50"
+                Cursor="Hand"
                 Margin="0 0 15 0"
                 Foreground="White"
                 Command="{Binding GoToUserPageCommand}"
@@ -63,6 +69,12 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vms:RequestPageViewModel}">
                     <views:RequestPage />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:UserPageViewModel}">
+                    <views:UserPage />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:RequestHistoryClientViewModel}">
+                    <views:RequestHistoryPageClient />
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>

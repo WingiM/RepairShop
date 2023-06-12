@@ -114,7 +114,7 @@ public partial class RequestPageViewModel : BaseViewModel
                 { Description = Description, ShortName = Title, ClientId = _authorizedUserStore.AuthorizedUser!.Id };
             var res = _requestService.Create(createDto);
             res.IfFail(PushErrorToSnackbar);
-            res.IfSucc(_ => _navigationService.GoBack());
+            res.IfSucc(x => _navigationService.PopAndNavigate(Routes.Request, new DynamicDictionary(("id", x.Id))));
         }
     }
 }

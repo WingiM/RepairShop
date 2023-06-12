@@ -12,6 +12,7 @@ public static class ValidationErrorMessages
     public const string LoginCannotBeEmpty = "Логин не может быть пустым";
     public const string LoginCannotBeMoreThan50Symbols = "Максимальная длина логина - 50 символов";
     public const string PasswordCannotBeEmpty = "Пароль не может быть пустым";
+    public const string WrongOldPassword = "Неверно указан старый пароль";
     public const string PasswordCannotBeMoreThan50Symbols = "Максимальная длина пароля - 50 символов";
     
     public const string RepairRequestDoesNotExist = "Такого запроса на ремонт не существует";

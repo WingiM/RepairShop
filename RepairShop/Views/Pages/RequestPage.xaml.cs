@@ -1,13 +1,12 @@
-﻿namespace RepairShop.Views.Pages
+﻿namespace RepairShop.Views.Pages;
+
+/// <summary>
+/// Interaction logic for RequestPage.xaml
+/// </summary>
+public partial class RequestPage
 {
-    /// <summary>
-    /// Interaction logic for RequestPage.xaml
-    /// </summary>
-    public partial class RequestPage
+    public RequestPage()
     {
-        public RequestPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

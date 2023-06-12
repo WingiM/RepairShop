@@ -7,6 +7,7 @@ namespace RepairShop.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private readonly INavigationService<BaseViewModel> _navigationService;
+    private readonly AuthorizedUserStore _authorizedUserStore;
 
     [ObservableProperty] private string _userLetter = string.Empty;
 
@@ -14,6 +15,7 @@ public partial class MainViewModel : ObservableObject
 
     public RelayCommand GoBackCommand { get; set; }
     public RelayCommand GoToUserPageCommand { get; set; }
+    public RelayCommand GoHomeCommand { get; set; }
 
     public MainViewModel(INavigationService<BaseViewModel> navigationService,
         AuthorizedUserStore authorizedUserStore,
@@ -23,23 +25,35 @@ public partial class MainViewModel : ObservableObject
         authorizedUserStore.OnLogout += AuthorizedUserStore_OnLogout;
 
         _navigationService = navigationService;
+        _authorizedUserStore = authorizedUserStore;
         _navigationService.OnNavigated += OnNavigated;
 
         GoBackCommand = new RelayCommand(() => navigationService.GoBack(), () => navigationService.CanGoBack);
-        GoToUserPageCommand = new RelayCommand(() => navigationService.Navigate(Routes.Authorization),
+        GoToUserPageCommand = new RelayCommand(() => navigationService.Navigate(Routes.UserPage),
             () => authorizedUserStore.IsAuthorized);
+        GoHomeCommand = new RelayCommand(() => NavigateHome(), () => true);
 
         var authorizedUserId = Properties.Settings.Default.LoggedUserId;
         var user = userService.GetUser(authorizedUserId);
         if (user is not null)
         {
             authorizedUserStore.Authorize(user);
-            if (user.RoleId == (int)Roles.Client)
-                _navigationService.Navigate(Routes.ClientPage);
+            NavigateHome();
             return;
         }
 
         _navigationService.Navigate(Routes.Authorization);
+    }
+
+    private void NavigateHome()
+    {
+        if (!_authorizedUserStore.IsAuthorized)
+        {
+            _navigationService.ClearAndNavigate(Routes.Authorization);
+            return;
+        }
+        if (_authorizedUserStore.AuthorizedUser!.RoleId == (int)Roles.Client)
+            _navigationService.ClearAndNavigate(Routes.ClientPage);
     }
 
     private void AuthorizedUserStore_OnLogout()
@@ -47,6 +61,7 @@ public partial class MainViewModel : ObservableObject
         Properties.Settings.Default.LoggedUserId = 0;
         Properties.Settings.Default.Save();
         GoToUserPageCommand.NotifyCanExecuteChanged();
+        _navigationService.ClearAndNavigate(Routes.Authorization);
     }
 
     private void AuthorizedUserStore_OnAuthorized(User user)

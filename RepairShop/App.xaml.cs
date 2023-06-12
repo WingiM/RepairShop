@@ -45,6 +45,8 @@ public partial class App
         services.AddViewModelFactory<RegisterViewModel>();
         services.AddViewModelFactory<ClientPageViewModel>();
         services.AddViewModelFactory<RequestPageViewModel>();
+        services.AddViewModelFactory<UserPageViewModel>();
+        services.AddViewModelFactory<RequestHistoryClientViewModel>();
         services.AddSingleton<MainViewModel>();
 
         services.AddSingleton(typeof(MainWindow));

@@ -49,25 +49,29 @@
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
                             <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status.Id}" Value="0">
+                                    <Setter Property="Fill"
+                                            Value="White" />
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Status.Id}" Value="1">
                                     <Setter Property="Fill"
                                             Value="{StaticResource AccentColor}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Status.Id}" Value="2">
                                     <Setter Property="Fill"
-                                            Value="White" />
+                                            Value="DarkOrange" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Status.Id}" Value="3">
                                     <Setter Property="Fill"
-                                            Value="Teal" />
+                                            Value="Cyan" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Status.Id}" Value="4">
                                     <Setter Property="Fill"
-                                            Value="Cyan" />
+                                            Value="Lime" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Status.Id}" Value="5">
                                     <Setter Property="Fill"
-                                            Value="Lime" />
+                                            Value="Green" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

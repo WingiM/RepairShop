@@ -58,13 +58,61 @@
                        HorizontalAlignment="Center"
                        Foreground="{StaticResource AccentColor}"
                        Text="Ваши текущие заявки" />
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Текущий статус: " 
+                           VerticalAlignment="Center" />
+                <ComboBox HorizontalAlignment="Center" 
+                          MinWidth="200"
+                          ItemsSource="{Binding Statuses}"
+                          SelectedItem="{Binding SelectedStatusFilter}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        ToolTip="{Binding Description}">
+                                <Ellipse Width="20" Height="20" Margin="0 0 10 0">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Id}" Value="0">
+                                                    <Setter Property="Fill"
+                                                            Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="1">
+                                                    <Setter Property="Fill"
+                                                            Value="{StaticResource AccentColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="2">
+                                                    <Setter Property="Fill"
+                                                            Value="DarkOrange" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="3">
+                                                    <Setter Property="Fill"
+                                                            Value="Cyan" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="4">
+                                                    <Setter Property="Fill"
+                                                            Value="Lime" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
             <ListView d:ItemsSource="{d:SampleData ItemCount=15}"
                       x:Name="MainListView"
                       ItemsSource="{Binding RepairRequests}"
                       Margin="0 20 0 0"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
-                      Height="400"
+                      Height="350"
                       Width="500"
                       ScrollViewer.CanContentScroll="False"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
@@ -131,23 +179,23 @@
                                     <Ellipse.Style>
                                         <Style TargetType="Ellipse">
                                             <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="0">
+                                                    <Setter Property="Fill"
+                                                            Value="White" />
+                                                </DataTrigger>
                                                 <DataTrigger Binding="{Binding ActualStatus.Id}" Value="1">
                                                     <Setter Property="Fill"
                                                             Value="{StaticResource AccentColor}" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding ActualStatus.Id}" Value="2">
                                                     <Setter Property="Fill"
-                                                            Value="White" />
+                                                            Value="DarkOrange" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding ActualStatus.Id}" Value="3">
                                                     <Setter Property="Fill"
-                                                            Value="Teal" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="4">
-                                                    <Setter Property="Fill"
                                                             Value="Cyan" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="5">
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="4">
                                                     <Setter Property="Fill"
                                                             Value="Lime" />
                                                 </DataTrigger>

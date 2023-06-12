@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using LanguageExt.Common;
 using Microsoft.Extensions.DependencyInjection;
+using RepairShop.Data.Models;
 using System;
 
 namespace RepairShop.Services.Impl;
@@ -23,6 +24,19 @@ public class AuthorizationService : IAuthorizationService
         if (user is null)
             return new Result<User>(new Exception("Пользователь не найден"));
         return user;
+    }
+
+    public Result<bool> ChangePassword(ChangeUserPasswordDto dto)
+    {
+        var validationResult = _serviceProdiver.GetRequiredService<IValidator<ChangeUserPasswordDto>>().Validate(dto);
+        if (!validationResult.IsValid)
+            return new Result<bool>(new ValidationException(validationResult.Errors));
+
+        var user = _context.Users.First(x => x.Login == dto.Login);
+        user.Password = dto.NewPassword;
+        _context.Users.Update(user);
+        _context.SaveChanges();
+        return true;
     }
 
     public Result<User> RegisterClient(RegisterUserDto user)

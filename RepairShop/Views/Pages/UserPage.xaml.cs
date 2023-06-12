@@ -1,11 +1,11 @@
 ﻿namespace RepairShop.Views.Pages;
 
 /// <summary>
-/// Interaction logic for ClientPage.xaml
+/// Interaction logic for UserPage.xaml
 /// </summary>
-public partial class ClientPage
+public partial class UserPage
 {
-    public ClientPage()
+    public UserPage()
     {
         InitializeComponent();
     }
