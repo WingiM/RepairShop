@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Windows.Navigation;
-using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
 

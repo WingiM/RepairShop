@@ -42,8 +42,7 @@
                     HorizontalAlignment="Center"
                     Content="Зарегистрироваться"
                     Style="{StaticResource AccentButtonStyle}"
-                    Command="{Binding RegisterCommand}">
-            </Button>
+                    Command="{Binding RegisterCommand}" />
             <TextBlock HorizontalAlignment="Center">
                 <Hyperlink Command="{Binding AuthorizeCommand}"
                            TextDecorations="None"

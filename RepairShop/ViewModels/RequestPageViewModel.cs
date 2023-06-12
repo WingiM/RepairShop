@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using RepairShop.Attributes;
 using RepairShop.ViewModels.Base;
+using System.Collections.ObjectModel;
 
 namespace RepairShop.ViewModels;
 
@@ -8,22 +10,43 @@ namespace RepairShop.ViewModels;
 public partial class RequestPageViewModel : BaseViewModel
 {
     public static string SaveButtonTooltipIfNotEditable => ValidationErrorMessages.CannotEditRepairRequest;
+    public static string TitleTooltip => "Короткое название для запроса";
+    public static string DescriptionTooltip => "Подробное описание проблемы";
 
     private readonly INavigationService<BaseViewModel> _navigationService;
     private readonly IRequestService _requestService;
+    private readonly AuthorizedUserStore _authorizedUserStore;
 
-    [ObservableProperty]
-    private bool _isCreate;
+    private RepairRequest? _request;
 
-    [ObservableProperty]
-    private bool _isEditable;
+    [ObservableProperty] private bool _isEdit = true;
+
+    [ObservableProperty] private bool _isEditable;
+
+    [ObservableProperty] private int _id;
+
+    [ObservableProperty] private string _title = string.Empty;
+
+    [ObservableProperty] private string _description = string.Empty;
+
+    [ObservableProperty] private RequestStatus _status = null!;
+
+    [ObservableProperty] private string? _masterName;
+
+    [ObservableProperty] private ObservableCollection<StatusHistory> _statusHistory = null!;
+
+    public RelayCommand SaveCommand { get; set; }
 
     public RequestPageViewModel(INavigationService<BaseViewModel> navigationService,
-        IRequestService requestService)
+        IRequestService requestService,
+        AuthorizedUserStore authorizedUserStore)
     {
         ViewModelTitle = "Запрос на ремонт";
         _navigationService = navigationService;
         _requestService = requestService;
+        _authorizedUserStore = authorizedUserStore;
+
+        SaveCommand = new RelayCommand(() => SaveRequest(), () => IsEditable);
     }
 
     public override NavigationResult OnNavigatedTo(NavigationArgs args)
@@ -31,7 +54,8 @@ public partial class RequestPageViewModel : BaseViewModel
         var isCreate = args.Parameters.GetValue<bool>("isCreate");
         if (isCreate)
         {
-            IsCreate = true;
+            IsEdit = false;
+            IsEditable = true;
             return base.OnNavigatedTo(args);
         }
 
@@ -44,7 +68,6 @@ public partial class RequestPageViewModel : BaseViewModel
             return base.OnNavigatedTo(args);
         }
 
-        RepairRequest? request = null;
         result.IfSucc(req =>
         {
             if (req is null)
@@ -52,16 +75,46 @@ public partial class RequestPageViewModel : BaseViewModel
                 return;
             }
 
-            request = req;
+            _request = req;
             ViewModelTitle += $" № {req.Id}";
-            IsEditable = req.MasterId != default;
+            Id = req.Id;
+            Title = req.ShortName;
+            Description = req.Description;
+            StatusHistory = new ObservableCollection<StatusHistory>(req.StatusHistories);
+            Status = req.ActualStatus!;
+            MasterName = req.Master?.Login;
+            IsEditable = !IsEdit || req.MasterId == default;
         });
 
-        if (request is null)
+        if (_request is null)
         {
-            return new NavigationResult { IsSuccess = false, Message = "Указанный запрос на ремонт не был найден в системе", NavigationArgs = args };
+            return new NavigationResult
+            {
+                IsSuccess = false, Message = "Указанный запрос на ремонт не был найден в системе", NavigationArgs = args
+            };
         }
 
         return base.OnNavigatedTo(args);
+    }
+
+    private void SaveRequest()
+    {
+        if (!_authorizedUserStore.IsAuthorized) return;
+        if (IsEdit)
+        {
+            var updateDto = new UpdateRepairRequestDto()
+                { Description = Description, ShortName = Title, RequestId = Id };
+            var res = _requestService.Update(updateDto);
+            res.IfFail(PushErrorToSnackbar);
+            res.IfSucc(_ => WriteToSnackBar("Изменения сохранены"));
+        }
+        else
+        {
+            var createDto = new CreateRepairRequestDto()
+                { Description = Description, ShortName = Title, ClientId = _authorizedUserStore.AuthorizedUser!.Id };
+            var res = _requestService.Create(createDto);
+            res.IfFail(PushErrorToSnackbar);
+            res.IfSucc(_ => _navigationService.GoBack());
+        }
     }
 }

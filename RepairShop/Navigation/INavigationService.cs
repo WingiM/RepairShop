@@ -1,5 +1,4 @@
-﻿using RepairShop.ViewModels.Base;
-using System;
+﻿using System;
 
 namespace RepairShop.Navigation;
 

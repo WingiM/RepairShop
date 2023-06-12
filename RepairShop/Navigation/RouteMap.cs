@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using RepairShop.Attributes;
-using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
 

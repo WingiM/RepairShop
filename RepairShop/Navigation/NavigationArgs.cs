@@ -1,6 +1,4 @@
-﻿using System.Windows.Navigation;
-
-namespace RepairShop.Navigation;
+﻿namespace RepairShop.Navigation;
 
 public class NavigationArgs
 {

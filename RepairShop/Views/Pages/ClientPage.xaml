@@ -57,14 +57,14 @@
             <TextBlock FontSize="24"
                        HorizontalAlignment="Center"
                        Foreground="{StaticResource AccentColor}"
-                       Text="Ваши текущие заказы" />
+                       Text="Ваши текущие заявки" />
             <ListView d:ItemsSource="{d:SampleData ItemCount=15}"
                       x:Name="MainListView"
                       ItemsSource="{Binding RepairRequests}"
                       Margin="0 20 0 0"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
-                      Height="300"
+                      Height="400"
                       Width="500"
                       ScrollViewer.CanContentScroll="False"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
@@ -100,8 +100,7 @@
                                 <MouseBinding Gesture="LeftDoubleClick"
                                               Command="{Binding DataContext.GoToRequestCommand, 
                                                         RelativeSource={RelativeSource AncestorType=vms:ClientPage}}"
-                                              CommandParameter="{Binding Id}">
-                                </MouseBinding>
+                                              CommandParameter="{Binding Id}" />
                             </Grid.InputBindings>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -111,7 +110,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
                                        Grid.Column="0"
-                                       Text="{Binding Id, StringFormat=Заказ №: {0}}" />
+                                       Text="{Binding Id, StringFormat=Заявка №: {0}}" />
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
                                        Text="{Binding ShortName}"

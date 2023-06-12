@@ -22,7 +22,7 @@
                 </Style.Triggers>
             </Style>
             <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="18"></Setter>
+                <Setter Property="FontSize" Value="18" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

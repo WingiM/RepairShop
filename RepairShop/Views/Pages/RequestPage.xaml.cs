@@ -1,7 +1,4 @@
-﻿using System.Windows.Controls;
-
-
-namespace RepairShop.Views.Pages
+﻿namespace RepairShop.Views.Pages
 {
     /// <summary>
     /// Interaction logic for RequestPage.xaml
