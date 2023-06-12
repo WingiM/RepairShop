@@ -12,7 +12,7 @@ public partial class ClientPageViewModel : BaseViewModel
 {
     private readonly AuthorizedUserStore _authorizedUserStore;
     private readonly IRequestService _requestService;
-    private readonly NavigationService _navigationService;
+    private readonly INavigationService _navigationService;
 
     [ObservableProperty] private ObservableCollection<RepairRequest> _repairRequests = null!;
 
@@ -20,7 +20,7 @@ public partial class ClientPageViewModel : BaseViewModel
     public ICommand SeeRequestHistoryCommand { get; set; }
     public RelayCommand<int> GoToRequestCommand { get; set; }
 
-    public ClientPageViewModel(NavigationService navigationService, 
+    public ClientPageViewModel(INavigationService navigationService, 
         AuthorizedUserStore authorizedUserStore, 
         IRequestService requestService)
     {

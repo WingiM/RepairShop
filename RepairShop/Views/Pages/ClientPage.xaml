@@ -122,7 +122,7 @@
                                        TextAlignment="Center" />
                             <TextBlock Grid.Row="2"
                                        Grid.Column="0"
-                                       Text="{Binding Master.Name, FallbackValue='Мастер не назначен', 
+                                       Text="{Binding Master.Login, FallbackValue='Мастер не назначен', 
                                               StringFormat=Назначен мастеру {0}}"
                                        TextWrapping="Wrap" />
                             <StackPanel Grid.Row="3"

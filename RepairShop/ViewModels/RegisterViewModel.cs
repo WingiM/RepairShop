@@ -19,7 +19,7 @@ public partial class RegisterViewModel : AuthorizationBaseViewModel
     public ICommand RegisterCommand { get; private set; }
     public ICommand AuthorizeCommand { get; private set; }
 
-    public RegisterViewModel(NavigationService navigationService,
+    public RegisterViewModel(INavigationService navigationService,
         AuthorizedUserStore authorizedUserStore,
         IAuthorizationService authorizationService) : base(navigationService, authorizedUserStore)
     {

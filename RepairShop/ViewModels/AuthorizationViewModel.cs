@@ -17,7 +17,7 @@ public partial class AuthorizationViewModel : AuthorizationBaseViewModel
     public ICommand RegisterCommand { get; private set; }
     public ICommand AuthorizeCommand { get; private set; }
 
-    public AuthorizationViewModel(NavigationService navigationService,
+    public AuthorizationViewModel(INavigationService navigationService,
         IAuthorizationService authorizationService,
         AuthorizedUserStore authorizedUserStore) : base(navigationService, authorizedUserStore)
     {

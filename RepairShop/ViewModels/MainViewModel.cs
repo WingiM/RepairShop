@@ -6,7 +6,7 @@ namespace RepairShop.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    private readonly NavigationService _navigationService;
+    private readonly INavigationService _navigationService;
 
     [ObservableProperty]
     private string _userLetter = string.Empty;
@@ -16,7 +16,7 @@ public partial class MainViewModel : ObservableObject
     public RelayCommand GoBackCommand { get; set; }
     public RelayCommand GoToUserPageCommand { get; set; }
 
-    public MainViewModel(NavigationService navigationService, 
+    public MainViewModel(INavigationService navigationService, 
         AuthorizedUserStore authorizedUserStore, 
         IUserService userService)
     {
