@@ -9,6 +9,7 @@ using RepairShop.Views;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using RepairShop.ViewModels.Base;
 
 namespace RepairShop;
 
@@ -35,10 +36,9 @@ public partial class App
         ConfigurePresentation(services);
     }
 
-    private void ConfigurePresentation(IServiceCollection services)
+    private static void ConfigurePresentation(IServiceCollection services)
     {
-        services.AddSingleton<RouteMap>();
-        services.AddSingleton<INavigationService, NavigationService>();
+        services.AddNavigation<BaseViewModel>();
         services.AddSingleton<AuthorizedUserStore>();
 
         services.AddViewModelFactory<AuthorizationViewModel>();

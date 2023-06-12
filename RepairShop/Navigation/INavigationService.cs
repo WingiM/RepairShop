@@ -3,9 +3,9 @@ using System;
 
 namespace RepairShop.Navigation;
 
-public interface INavigationService
+public interface INavigationService<out T> where T : class, INavigatable
 {
-    public BaseViewModel CurrentViewModel { get; }
+    public T CurrentNavigatedItem { get; }
     public bool CanGoBack { get; }
 
     public NavigationResult Navigate(string path, DynamicDictionary? parameters = null);

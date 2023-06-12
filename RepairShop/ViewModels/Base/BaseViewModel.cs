@@ -5,7 +5,7 @@ using MaterialDesignThemes.Wpf;
 
 namespace RepairShop.ViewModels.Base;
 
-public abstract partial class BaseViewModel : ObservableObject
+public abstract partial class BaseViewModel : ObservableObject, INavigatable
 {
     [ObservableProperty]
     private string _viewModelTitle = "Ремонтная мастерская";

@@ -9,7 +9,7 @@ public partial class RequestPageViewModel : BaseViewModel
 {
     public static string SaveButtonTooltipIfNotEditable => ValidationErrorMessages.CannotEditRepairRequest;
 
-    private readonly INavigationService _navigationService;
+    private readonly INavigationService<BaseViewModel> _navigationService;
     private readonly IRequestService _requestService;
 
     [ObservableProperty]
@@ -18,7 +18,7 @@ public partial class RequestPageViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isEditable;
 
-    public RequestPageViewModel(INavigationService navigationService,
+    public RequestPageViewModel(INavigationService<BaseViewModel> navigationService,
         IRequestService requestService)
     {
         ViewModelTitle = "Запрос на ремонт";

@@ -5,16 +5,16 @@ using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
 
-public class RouteMap
+public class RouteMap<T> where T : class, INavigatable
 {
     private readonly IReadOnlyDictionary<string, Type> _routes;
 
     public RouteMap()
     {
-        var viewModels = typeof(BaseViewModel).Assembly
+        var viewModels = typeof(T).Assembly
             .GetTypes()
             .Where(x => !x.IsAbstract
-                        && x.IsSubclassOf(typeof(BaseViewModel))
+                        && x.IsSubclassOf(typeof(T))
                         && x.IsDefined(typeof(RouteAttribute), false))
             .ToDictionary(GetRouteAttributeValueFromClass, x => x);
         _routes = new ReadOnlyDictionary<string, Type>(viewModels);

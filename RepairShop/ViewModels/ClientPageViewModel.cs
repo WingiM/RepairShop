@@ -12,7 +12,7 @@ public partial class ClientPageViewModel : BaseViewModel
 {
     private readonly AuthorizedUserStore _authorizedUserStore;
     private readonly IRequestService _requestService;
-    private readonly INavigationService _navigationService;
+    private readonly INavigationService<BaseViewModel> _navigationService;
 
     [ObservableProperty] private ObservableCollection<RepairRequest> _repairRequests = null!;
 
@@ -20,7 +20,7 @@ public partial class ClientPageViewModel : BaseViewModel
     public ICommand SeeRequestHistoryCommand { get; set; }
     public RelayCommand<int> GoToRequestCommand { get; set; }
 
-    public ClientPageViewModel(INavigationService navigationService,
+    public ClientPageViewModel(INavigationService<BaseViewModel> navigationService,
         AuthorizedUserStore authorizedUserStore,
         IRequestService requestService)
     {
@@ -43,7 +43,7 @@ public partial class ClientPageViewModel : BaseViewModel
     private void OpenRequest(int id, bool isCreate)
     {
         _navigationService.Navigate(Routes.Request,
-            parameters: new DynamicDictionary((nameof(id), 5), (nameof(isCreate), isCreate)));
+            parameters: new DynamicDictionary((nameof(id), id), (nameof(isCreate), isCreate)));
     }
 
     private void GetClientRequests()

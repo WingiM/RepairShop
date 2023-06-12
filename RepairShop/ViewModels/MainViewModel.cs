@@ -6,16 +6,16 @@ namespace RepairShop.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    private readonly INavigationService _navigationService;
+    private readonly INavigationService<BaseViewModel> _navigationService;
 
     [ObservableProperty] private string _userLetter = string.Empty;
 
-    public BaseViewModel CurrentViewModel => _navigationService.CurrentViewModel;
+    public BaseViewModel CurrentViewModel => _navigationService.CurrentNavigatedItem;
 
     public RelayCommand GoBackCommand { get; set; }
     public RelayCommand GoToUserPageCommand { get; set; }
 
-    public MainViewModel(INavigationService navigationService,
+    public MainViewModel(INavigationService<BaseViewModel> navigationService,
         AuthorizedUserStore authorizedUserStore,
         IUserService userService)
     {

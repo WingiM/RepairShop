@@ -4,10 +4,10 @@ namespace RepairShop.ViewModels.Base;
 
 public abstract partial class AuthorizationBaseViewModel : BaseViewModel
 {
-    private readonly INavigationService _navigationService;
+    private readonly INavigationService<BaseViewModel> _navigationService;
     private readonly AuthorizedUserStore _authorizedUserStore;
 
-    protected AuthorizationBaseViewModel(INavigationService navigationService,
+    protected AuthorizationBaseViewModel(INavigationService<BaseViewModel> navigationService,
         AuthorizedUserStore authorizedUserStore)
     {
         _navigationService = navigationService;

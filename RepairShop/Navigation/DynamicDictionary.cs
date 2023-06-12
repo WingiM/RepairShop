@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RepairShop.Data;
+﻿namespace RepairShop.Navigation;
 
 public class DynamicDictionary
 {

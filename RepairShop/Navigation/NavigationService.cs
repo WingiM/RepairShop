@@ -4,27 +4,27 @@ using RepairShop.ViewModels.Base;
 
 namespace RepairShop.Navigation;
 
-public class NavigationService : INavigationService
+public class NavigationService<T> : INavigationService<T> where T : class, INavigatable
 {
-    private readonly Stack<KeyValuePair<string, BaseViewModel>> _routeHistory;
+    private readonly Stack<KeyValuePair<string, T>> _routeHistory;
 
-    private readonly Dictionary<NavigationMethod, Action<Stack<KeyValuePair<string, BaseViewModel>>>>
+    private readonly Dictionary<NavigationMethod, Action<Stack<KeyValuePair<string, T>>>>
         _navigationMethodCallbacks = new()
         {
             { NavigationMethod.Pop, x => x.Pop() },
             { NavigationMethod.Clear, x => x.Clear() },
         };
 
-    public BaseViewModel CurrentViewModel { get; private set; } = null!;
+    public T CurrentNavigatedItem { get; private set; } = null!;
 
     public bool CanGoBack => _routeHistory.Length() != 1;
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly RouteMap _routeMap;
+    private readonly RouteMap<T> _routeMap;
 
-    public NavigationService(IServiceProvider serviceProvider, RouteMap routeMap)
+    public NavigationService(IServiceProvider serviceProvider, RouteMap<T> routeMap)
     {
-        _routeHistory = new Stack<KeyValuePair<string, BaseViewModel>>();
+        _routeHistory = new Stack<KeyValuePair<string, T>>();
         _serviceProvider = serviceProvider;
         _routeMap = routeMap;
     }
@@ -52,7 +52,7 @@ public class NavigationService : INavigationService
         var args = new NavigationArgs { Destination = viewModel.Key, NavigationMode = NavigationMode.Back };
 
         var result = viewModel.Value.OnNavigatedTo(args);
-        CurrentViewModel = viewModel.Value;
+        CurrentNavigatedItem = viewModel.Value;
 
         OnNavigated?.Invoke(result);
     }
@@ -65,7 +65,7 @@ public class NavigationService : INavigationService
             return BuildUnsuccessfulResult(args);
 
         var viewModelType = _routeMap[path]!;
-        if (_serviceProvider.GetService(viewModelType) is not BaseViewModel viewModel)
+        if (_serviceProvider.GetService(viewModelType) is not T viewModel)
             return BuildUnsuccessfulResult(args);
 
         var result = viewModel.OnNavigatedTo(args);
@@ -74,8 +74,8 @@ public class NavigationService : INavigationService
         {
             _navigationMethodCallbacks.TryGetValue(method, out var value);
             value?.Invoke(_routeHistory);
-            _routeHistory.Push(new KeyValuePair<string, BaseViewModel>(path, viewModel));
-            CurrentViewModel = viewModel;
+            _routeHistory.Push(new KeyValuePair<string, T>(path, viewModel));
+            CurrentNavigatedItem = viewModel;
         }
 
         OnNavigated?.Invoke(result);
