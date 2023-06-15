@@ -2,9 +2,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
+using RepairShop.Attributes;
 
 namespace RepairShop.ViewModels.Base;
 
+[ViewModelLifetime(Lifetime = ServiceLifetime.Transient)]
 public abstract partial class BaseViewModel : ObservableObject, INavigatable
 {
     [ObservableProperty]

@@ -41,12 +41,7 @@ public partial class App
         services.AddNavigation<BaseViewModel>();
         services.AddSingleton<AuthorizedUserStore>();
 
-        services.AddViewModelFactory<AuthorizationViewModel>();
-        services.AddViewModelFactory<RegisterViewModel>();
-        services.AddViewModelFactory<ClientPageViewModel>();
-        services.AddViewModelFactory<RequestPageViewModel>();
-        services.AddViewModelFactory<UserPageViewModel>();
-        services.AddViewModelFactory<RequestHistoryClientViewModel>();
+        services.RegisterTransientViewModelsFromAssembly(typeof(BaseViewModel).Assembly);
         services.AddSingleton<MainViewModel>();
 
         services.AddSingleton(typeof(MainWindow));
