@@ -28,6 +28,9 @@ public abstract partial class AuthorizationBaseViewModel : BaseViewModel
             case (int)Roles.Client:
                 _navigationService.PopAndNavigate(Routes.ClientPage);
                 break;
+            case (int)Roles.Master:
+                _navigationService.PopAndNavigate(Routes.MasterPage);
+                break;
         }
     }
 }

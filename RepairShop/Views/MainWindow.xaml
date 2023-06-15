@@ -76,6 +76,15 @@
                 <DataTemplate DataType="{x:Type vms:RequestHistoryClientViewModel}">
                     <views:RequestHistoryPageClient />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:MasterPageViewModel}">
+                    <views:MasterPage />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:RequestHistoryMasterViewModel}">
+                    <views:RequestHistoryPageMaster />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:RequestPageMasterViewModel}">
+                    <views:RequestPageMaster />
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
         <material:Snackbar Grid.Row="1"

@@ -13,6 +13,7 @@
             <SolidColorBrush x:Key="SecondaryColor" Color="#BDBDBD"/>
             <SolidColorBrush x:Key="AccentColor" Color="#FF4F6F"/>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
             <cv:GridInListViewWithConverter x:Key="GridInListViewWithConverter"/>
             <Style x:Key="GoBackButton" TargetType="Button">
                 <Style.Triggers>

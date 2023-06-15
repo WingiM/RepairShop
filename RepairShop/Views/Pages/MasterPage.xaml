@@ -1,0 +1,214 @@
+﻿<UserControl x:Class="RepairShop.Views.Pages.MasterPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vms="clr-namespace:RepairShop.Views.Pages"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="{StaticResource PrimaryColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="8*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    Margin="5 25 0 0">
+            <StackPanel.Resources>
+                <Style TargetType="Button"
+                       BasedOn="{StaticResource AccentButtonStyle}">
+                    <Setter Property="Margin"
+                            Value="0 0 0 10" />
+                    <Setter Property="Padding"
+                            Value="5" />
+                    <Setter Property="BorderBrush"
+                            Value="Black" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Stretch" />
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius"
+                                    Value="10" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </StackPanel.Resources>
+            <Button Background="{StaticResource AccentColor}"
+                    Foreground="White"
+                    Command="{Binding CreateRequestCommand}">
+                <Button.Content>
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Создать заявку" />
+                </Button.Content>
+            </Button>
+            <Button Background="{StaticResource AccentColor}"
+                    Foreground="White"
+                    Command="{Binding SeeRequestHistoryCommand}">
+                <Button.Content>
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="История заявок" />
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1"
+                    Margin="20">
+            <TextBlock FontSize="24"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource AccentColor}"
+                       Text="Ваши текущие заявки" />
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Текущий статус: " 
+                           VerticalAlignment="Center" />
+                <ComboBox HorizontalAlignment="Center" 
+                          MinWidth="200"
+                          ItemsSource="{Binding Statuses}"
+                          SelectedItem="{Binding SelectedStatusFilter}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        ToolTip="{Binding Description}">
+                                <Ellipse Width="20" Height="20" Margin="0 0 10 0">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Id}" Value="0">
+                                                    <Setter Property="Fill"
+                                                            Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="1">
+                                                    <Setter Property="Fill"
+                                                            Value="{StaticResource AccentColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="2">
+                                                    <Setter Property="Fill"
+                                                            Value="DarkOrange" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="3">
+                                                    <Setter Property="Fill"
+                                                            Value="Cyan" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Id}" Value="4">
+                                                    <Setter Property="Fill"
+                                                            Value="Lime" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <ListView d:ItemsSource="{d:SampleData ItemCount=15}"
+                      x:Name="MainListView"
+                      ItemsSource="{Binding RepairRequests}"
+                      Margin="0 20 0 0"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Height="350"
+                      Width="500"
+                      ScrollViewer.CanContentScroll="False"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Style.Resources>
+                            <SolidColorBrush Color="DarkGray"
+                                             Opacity="0.5"
+                                             x:Key="BackgroundBrush" />
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="true">
+                                <Setter Property="BorderBrush" Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background"
+                                Value="{StaticResource BackgroundBrush}" />
+                        <Setter Property="BorderBrush"
+                                Value="Black" />
+                        <Setter Property="BorderThickness"
+                                Value="1" />
+                        <Setter Property="Margin"
+                                Value="5" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Width="{Binding Width, ElementName=MainListView, 
+                                    Converter={StaticResource GridInListViewWithConverter}}">
+                            <Grid.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick"
+                                              Command="{Binding DataContext.GoToRequestCommand, 
+                                                        RelativeSource={RelativeSource AncestorType=vms:MasterPage}}"
+                                              CommandParameter="{Binding Id}" />
+                            </Grid.InputBindings>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="{Binding Id, StringFormat=Заявка №: {0}}" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="{Binding ShortName}"
+                                       Foreground="{StaticResource AccentColor}"
+                                       FontSize="24"
+                                       Margin="10"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="{Binding Client.Login, 
+                                              StringFormat=Заявку оставил {0}}"
+                                       TextWrapping="Wrap" />
+                            <StackPanel Grid.Row="3"
+                                        Grid.Column="0"
+                                        Orientation="Horizontal">
+                                <Ellipse Width="20" Height="20" Margin="0 0 10 0">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="0">
+                                                    <Setter Property="Fill"
+                                                            Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="1">
+                                                    <Setter Property="Fill"
+                                                            Value="{StaticResource AccentColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="2">
+                                                    <Setter Property="Fill"
+                                                            Value="DarkOrange" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="3">
+                                                    <Setter Property="Fill"
+                                                            Value="Cyan" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualStatus.Id}" Value="4">
+                                                    <Setter Property="Fill"
+                                                            Value="Lime" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <TextBlock Text="{Binding ActualStatus.Name, FallbackValue='Не определен'}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</UserControl>

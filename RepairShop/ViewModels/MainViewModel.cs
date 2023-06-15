@@ -54,6 +54,8 @@ public partial class MainViewModel : ObservableObject
         }
         if (_authorizedUserStore.AuthorizedUser!.RoleId == (int)Roles.Client)
             _navigationService.ClearAndNavigate(Routes.ClientPage);
+        if (_authorizedUserStore.AuthorizedUser!.RoleId == (int)Roles.Master)
+            _navigationService.ClearAndNavigate(Routes.MasterPage);
     }
 
     private void AuthorizedUserStore_OnLogout()
@@ -66,7 +68,7 @@ public partial class MainViewModel : ObservableObject
 
     private void AuthorizedUserStore_OnAuthorized(User user)
     {
-        UserLetter = user.Login[0].ToString();
+        UserLetter = user.Login[0].ToString().ToUpper();
         Properties.Settings.Default.LoggedUserId = user.Id;
         Properties.Settings.Default.Save();
         GoToUserPageCommand.NotifyCanExecuteChanged();

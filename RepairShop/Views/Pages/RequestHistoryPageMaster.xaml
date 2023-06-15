@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="RepairShop.Views.Pages.RequestHistoryPageClient"
+﻿<UserControl x:Class="RepairShop.Views.Pages.RequestHistoryPageMaster"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,12 +13,12 @@
                              x:Key="BackgroundBrush" />
         </Grid.Resources>
         <Border BorderThickness="1"
-                Padding="10"
-                BorderBrush="Black"
-                Background="{StaticResource BackgroundBrush}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Visibility="{Binding ElementName=MainListView, Path=HasItems, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    Padding="10"
+                    BorderBrush="Black"
+                    Background="{StaticResource BackgroundBrush}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding ElementName=MainListView, Path=HasItems, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
             <TextBlock Text="Завершенных заявок нет" 
                        Foreground="{StaticResource AccentColor}"/>
         </Border>
@@ -63,7 +63,7 @@
                             <Grid.InputBindings>
                                 <MouseBinding Gesture="LeftDoubleClick"
                                               Command="{Binding DataContext.GoToRequestCommand, 
-                                                        RelativeSource={RelativeSource AncestorType=vms:RequestHistoryPageClient}}"
+                                                        RelativeSource={RelativeSource AncestorType=vms:RequestHistoryPageMaster}}"
                                               CommandParameter="{Binding Id}" />
                             </Grid.InputBindings>
                             <Grid.RowDefinitions>
@@ -85,8 +85,8 @@
                                        TextAlignment="Center" />
                             <TextBlock Grid.Row="2"
                                        Grid.Column="0"
-                                       Text="{Binding Master.Login, FallbackValue='Мастер не назначен', 
-                                              StringFormat=Выполнял мастер {0}}"
+                                       Text="{Binding Client.Login, 
+                                              StringFormat=Заявку оставлял {0}}"
                                        TextWrapping="Wrap" />
                             <StackPanel Grid.Row="3"
                                         Grid.Column="0"
