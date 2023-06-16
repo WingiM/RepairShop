@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using RepairShop.Attributes;
+﻿using RepairShop.Attributes;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop.ViewModels;

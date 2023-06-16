@@ -15,7 +15,7 @@ public class AssignMasterToRequestValidator : AbstractValidator<AssignMasterToRe
         RuleFor(x => x.RequestId)
             .Must(x => context.RepairRequests.Find(x) != null)
             .WithMessage(ValidationErrorMessages.RepairRequestDoesNotExist)
-            .Must(x => context.StatusHistories.First(z => z.Id == x && z.IsActual).StatusId ==
+            .Must(x => context.StatusHistories.First(z => z.RequestId == x && z.IsActual).StatusId ==
                        (int)RequestStatuses.AwaitsConfirmation)
             .WithMessage(ValidationErrorMessages.RepairRequestStatusAlreadyChanged);
     }

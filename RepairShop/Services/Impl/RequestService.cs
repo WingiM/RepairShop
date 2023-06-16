@@ -198,6 +198,7 @@ public class RequestService : IRequestService
         _context.StatusHistories.Add(requestStatus);
 
         _context.SaveChanges();
+        _context.ChangeTracker.Clear();
         return true;
     }
 }

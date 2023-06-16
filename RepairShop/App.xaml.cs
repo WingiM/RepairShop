@@ -9,6 +9,7 @@ using RepairShop.Views;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using RepairShop.ViewModels.Base;
 
 namespace RepairShop;

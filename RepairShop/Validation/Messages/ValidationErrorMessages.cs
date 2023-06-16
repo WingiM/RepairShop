@@ -28,4 +28,6 @@ public static class ValidationErrorMessages
 
     public const string CannotChangeRequestStatus =
         "Можно изменять статусы только для уже переданных мастеру запросов на ремонт";
+
+    public const string CannotChangeToSameStatus = "Нельзя сменить статус на такой же";
 }

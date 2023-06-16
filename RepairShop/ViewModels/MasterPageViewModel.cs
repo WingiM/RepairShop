@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using RepairShop.Attributes;
 using RepairShop.ViewModels.Base;
 
@@ -29,7 +27,6 @@ public partial class MasterPageViewModel : BaseViewModel
         }
     }
 
-    public ICommand CreateRequestCommand { get; set; }
     public ICommand SeeRequestHistoryCommand { get; set; }
     public RelayCommand<int> GoToRequestCommand { get; set; }
 
@@ -52,10 +49,9 @@ public partial class MasterPageViewModel : BaseViewModel
         _selectedStatusFilter = newStatus;
 
         Statuses = new ObservableCollection<RequestStatus>(statuses);
-        CreateRequestCommand = new RelayCommand(() => OpenRequest(default, true), () => true);
         SeeRequestHistoryCommand =
             new RelayCommand(() => _navigationService.Navigate(Routes.MasterHistory), () => true);
-        GoToRequestCommand = new RelayCommand<int>(x => OpenRequest(x, false), _ => true);
+        GoToRequestCommand = new RelayCommand<int>(x => OpenRequest(x), _ => true);
     }
 
     public override NavigationResult OnNavigatedTo(NavigationArgs args)
@@ -64,10 +60,10 @@ public partial class MasterPageViewModel : BaseViewModel
         return base.OnNavigatedTo(args);
     }
 
-    private void OpenRequest(int id, bool isCreate)
+    private void OpenRequest(int id)
     {
         _navigationService.Navigate(Routes.RequestForMaster,
-            parameters: new DynamicDictionary((nameof(id), id), (nameof(isCreate), isCreate)));
+            parameters: new DynamicDictionary((nameof(id), id)));
     }
 
     private void GetMasterRequests()

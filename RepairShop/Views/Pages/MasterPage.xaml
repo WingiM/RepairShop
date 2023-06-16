@@ -35,15 +35,6 @@
             </StackPanel.Resources>
             <Button Background="{StaticResource AccentColor}"
                     Foreground="White"
-                    Command="{Binding CreateRequestCommand}">
-                <Button.Content>
-                    <TextBlock TextWrapping="Wrap"
-                               TextAlignment="Center"
-                               Text="Создать заявку" />
-                </Button.Content>
-            </Button>
-            <Button Background="{StaticResource AccentColor}"
-                    Foreground="White"
                     Command="{Binding SeeRequestHistoryCommand}">
                 <Button.Content>
                     <TextBlock TextWrapping="Wrap"

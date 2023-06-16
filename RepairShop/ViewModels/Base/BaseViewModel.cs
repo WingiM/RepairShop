@@ -1,5 +1,4 @@
 ﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
