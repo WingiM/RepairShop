@@ -2,9 +2,9 @@
 
 public class UserService : IUserService
 {
-    private readonly ApplicationContext _context;
+    private readonly IApplicationContext _context;
 
-    public UserService(ApplicationContext context)
+    public UserService(IApplicationContext context)
     {
         _context = context;
     }

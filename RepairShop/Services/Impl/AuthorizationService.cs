@@ -8,10 +8,10 @@ namespace RepairShop.Services.Impl;
 
 public class AuthorizationService : IAuthorizationService
 {
-    private readonly ApplicationContext _context;
+    private readonly IApplicationContext _context;
     private readonly IServiceProvider _serviceProdiver;
 
-    public AuthorizationService(ApplicationContext context, 
+    public AuthorizationService(IApplicationContext context, 
                                 IServiceProvider serviceProdiver)
     {
         _context = context;
@@ -22,7 +22,7 @@ public class AuthorizationService : IAuthorizationService
     {
         var user = _context.Users.FirstOrDefault(x => x.Login == login && x.Password == password);
         if (user is null)
-            return new Result<User>(new Exception("Пользователь не найден"));
+            return new Result<User>(new Exception(ValidationErrorMessages.UserDoesNotExist));
         return user;
     }
 

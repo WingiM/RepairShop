@@ -9,10 +9,10 @@ namespace RepairShop.Services.Impl;
 
 public class RequestService : IRequestService
 {
-    private readonly ApplicationContext _context;
+    private readonly IApplicationContext _context;
     private readonly IServiceProvider _serviceProvider;
 
-    public RequestService(ApplicationContext context,
+    public RequestService(IApplicationContext context,
         IServiceProvider serviceProvider)
     {
         _context = context;

@@ -31,6 +31,7 @@ public partial class App
                 npgsqlOptions => npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
+        services.AddScoped<IApplicationContext, ApplicationContext>();
 
         services.AddSingleton(configuration);
 
